@@ -61,9 +61,9 @@ const Authenticate = ({ windowWidth }) => {
         }
 
         try {
-            const path = authConfig ? 'sign-up-page' : 'log-in-page';
+            const path = authConfig ? 'register' : 'signin';
 
-            const response = await axios.post(`/${path}`, user, { withCredentials: true });
+            const response = await axios.post(`http://localhost:5000/${path}`, user, { withCredentials: true });
             if (authConfig && response.status === 200) {
                 navigate('/log-in')
                 setEmail({ ...email, value: ''})
