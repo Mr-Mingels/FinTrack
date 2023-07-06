@@ -1,0 +1,159 @@
+.mainWrapper {
+
+}
+
+.mainNavBar {
+    width: 100%;
+    background-color: #6d9dc5;
+    position: relative;
+    z-index: 2;
+}
+
+.mainNavBarContent {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+}
+
+.navBarLogoWrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.navLogoImg {
+    width: 50px;
+    height: 40px;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE10+/Edge */
+    user-select: none;
+}
+
+.navAppTitle {
+    color: rgb(255, 255, 255);
+}
+
+.navTitleSpecialColor {
+    color: #a0e1f9;
+}
+
+.navBarUserSettingWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navUserSettingBtn {
+    display: flex;
+    align-items: center;
+    padding: 6px 12px;
+    background-color: white;
+    border: none;
+    border-radius: 30px;
+    gap: 6px;
+    font-weight: 400;
+    cursor: pointer;
+    position: relative;
+}
+
+.navAngleUpIcon, .navAngleDownIcon {
+}
+
+.navUserSettingsModalWrapper {
+    position: absolute;
+    top: 36px;
+    border-radius: 4px;
+    right: 0;
+    background-color: white;
+    border: 1px solid black;
+    padding: 5px;
+    min-width: 110px;
+    max-width: 110px;
+    width: 100%;
+}
+
+.navUserSettingsModalContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+}
+
+.userSettingsLogOutBtn {
+    color: rgb(255, 119, 119);
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.userSettingsLogOutBtn.logOutLoader {
+    background-color: rgb(255, 119, 119);
+}
+
+.userSettingsLogOutBtn:hover {
+    background-color: rgb(255, 119, 119);
+    color: white;
+}
+
+
+
+/* MAIN CONTENT SECTION BELOW */
+
+
+
+.mainContentWrapper {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    padding-top: 70px;
+}
+
+.mainSideBarWrapper {
+    width: 220px;
+    background-color: #4b7090;
+    border-top-right-radius: 20px;
+}
+
+.mainSideBarContent {
+    padding: 30px 20px;
+}
+
+.sideBarListWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    list-style: none;
+    font-size: 15px;
+    color: white;
+    gap: 12px;
+}
+
+.sideBarListItem {
+    padding: 10px;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: white;
+}
+
+.sideBarListItem:hover {
+    background-color: white;
+    color: #4b7090;
+}
+
+.sideBarListItemIcon {
+    min-width: 16.88px;
+}

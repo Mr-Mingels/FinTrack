@@ -9,19 +9,19 @@ passport.use(new LocalStrategy({ usernameField: 'username', passReqToCallback: t
         const userByUsername = await db.select('*').from('users').where('username', username) // Look for a user with the username
         const userByEmail = await db.select('*').from('users').where('email', email) // Look for a user with the email
         
-        if (!userByEmail && !userByUsername) {
+        if (!userByEmail[0].email && !userByUsername[0].username) {
             return done(null, false, { message: "Incorrect email and username" });
         }
 
-        if (!userByEmail) {
+        if (!userByEmail[0].email) {
             return done(null, false, { message: "Incorrect email" });
         }
 
-        if (!userByUsername) {
+        if (!userByUsername[0].username) {
             return done(null, false, { message: "Incorrect username" });
         }
 
-        if (userByEmail.email !== userByUsername.email) {
+        if (userByEmail[0].email !== userByUsername[0].email) {
             return done(null, false, { message: "Email and username do not match the same user" });
         }
 
@@ -46,12 +46,10 @@ passport.use(new LocalStrategy({ usernameField: 'username', passReqToCallback: t
 }));
 
 passport.serializeUser((user, done) => {
-    console.log("user:", user)
     done(null, user.id)
 })
 
 passport.deserializeUser(async (id, done) => {
-    console.log("id:", id)
     try {
         const user = await db.select('*').from('users').where('id', id); // Retrieve the user from the users table
         done(null, user[0])

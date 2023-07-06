@@ -51,11 +51,11 @@ router.post('/signin', async (req, res, next) => {
 
     if (!req.body.email || !req.body.username || !password) {
         return res.status(400).send({ message: "All fields are required" });
-      } else if (!userByEmail && !userByUsername) {
+      } else if (!userByEmail[0].email && !userByUsername[0].username) {
         return res.status(400).send({ message: "Email and Username are incorrect" });
-      } else if (!userByEmail) {
+      } else if (!userByEmail[0].email) {
         return res.status(400).send({ message: 'Email is incorrect' });
-      } else if (!userByUsername) {
+      } else if (!userByUsername[0].username) {
         return res.status(400).send({ message: 'Username is incorrect' });
       }
     

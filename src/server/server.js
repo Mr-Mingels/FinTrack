@@ -24,6 +24,14 @@ app.use(localStrategy)
 app.use(passportSession)
 app.use(authRoutes)
 
+app.get('/user-info', (req, res) => {
+    if (req.isAuthenticated()) {
+      res.json(req.user)
+    } else {
+      res.status(401).send('Unauthorized');
+    }
+  })
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
