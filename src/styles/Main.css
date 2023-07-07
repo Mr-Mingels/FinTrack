@@ -58,6 +58,7 @@
 }
 
 .navAngleUpIcon, .navAngleDownIcon {
+    
 }
 
 .navUserSettingsModalWrapper {
@@ -118,7 +119,7 @@
 }
 
 .mainSideBarWrapper {
-    width: 220px;
+    min-width: 220px;
     background-color: #4b7090;
     border-top-right-radius: 20px;
 }
@@ -156,4 +157,8 @@
 
 .sideBarListItemIcon {
     min-width: 16.88px;
+}
+
+.renderedContentWrapper {
+    width: 100%;
 }

@@ -1,0 +1,205 @@
+.expenseTrackerWrapper {
+    padding: 15px;
+    height: 100%;
+}
+
+.renderedExpensesWrapper {
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.addExpenseWrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.addExpenseBtn {
+    background-color: transparent;
+    border: 2px solid #4b7090;
+    color: #4b7090;
+    padding: 10px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.addExpenseBtn:hover {
+    background-color: #4b7090;
+    color: white;
+}
+
+.renderedExpensesHeader {
+    display: flex;
+    padding: 16px 20px;
+    background-color: #6d9dc5;
+    color: white;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.renderedExpensesHeaderTitles {
+    font-size: 14px;
+    padding: 0 15px;
+}
+
+.renderedExpensesHeaderTitles.typeOfExpense {
+    width: 230px;
+
+}
+
+.renderedExpensesHeaderTitles.amount {
+    width: 200px;
+}
+
+.renderedExpensesHeaderTitles.date {
+    width: 130px;
+}
+
+
+
+/* EXPENSE TRACKER MODAL */
+
+
+
+.addExpenseModalWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(1, 1, 1, 0.5);
+    z-index: 10;
+}
+
+.addExpenseModalContent {
+    background-color: white;
+    border-radius: 8px;
+    padding: 30px;
+
+}
+
+.addExpenseModalTitle {
+    font-size: 22px;
+    font-weight: 600;
+    color: #6d9dc5;
+    margin-bottom: 16px;
+}
+
+.addExpenseModalMainContent {
+    display: flex;
+    flex-direction: column;
+}
+
+.addExpenseTypeModalBtn {
+    width: 360px;
+    padding: 10px;
+    outline: none;
+    border: 1px solid black;
+    display: flex;
+    border-radius: 4px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: transparent;
+    position: relative;
+    transition: all 0.2s ease-in-out;
+}
+
+.addExpenseTypeModalBtn.open {
+    border-color: #6d9dc5;
+    color: #6d9dc5;
+}
+
+.addExpenseModalAngleUpIcon {
+
+}
+
+.addExpenseModalAngleDownIcon {
+
+}
+
+.addExpenseTypeDropDownWrapper {
+    width: 100%;
+    position: absolute;
+    top: 42px;
+    right: 0;
+    max-height: 220px;
+    overflow-y: scroll;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0px 0px 10px 3px rgba(0,0,0,0.2);
+
+}
+
+.addExpenseTypeDropDownWrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.addExpenseDropDownItem {
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    cursor: pointer;
+    color: black;
+}
+
+.addExpenseDropDownItem:hover {
+    background-color: #6d9dc5;
+    color: white;
+}
+
+.addExpenseModalLabel {
+    height: 22px;
+    margin-top: 22px;
+    font-size: 14px;
+}
+
+.expenseRequireTag {
+    color: red;
+}
+
+.addExpenseModalInput {
+    width: 360px;
+    padding: 10px;
+    outline: none;
+    border: 1px solid black;
+    display: flex;
+    border-radius: 4px;
+}
+
+.addExpenseModalInput:focus {
+    border-color: #6d9dc5;
+}
+
+.addExpenseModalFooter {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 28px;
+}
+
+.addExpenseModalCloseBtn, .addExpenseModalAddExpenseBtn {
+    background-color: transparent;
+    border: 2px solid #4b7090;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 20px;
+}
+
+.addExpenseModalCloseBtn {
+    color: #4b7090;
+    transition: all 0.2s ease-in-out;
+}
+
+.addExpenseModalCloseBtn:hover {
+    background-color: #4b7090;
+    color: white;
+}
+
+.addExpenseModalAddExpenseBtn {
+    background-color: #4b7090;
+    color: white;
+}
