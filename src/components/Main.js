@@ -6,7 +6,7 @@ import axios from 'axios';
 import '../styles/Main.css'
 import logo from '../assets/logo.png'
 
-const Main = () => {
+const Main = ({ setExtractedUserInfo, getUserInfoFunction }) => {
     const [userInfo, setUserInfo] = useState()
     const [userSettingsModalOpen, setUserSettingsModalOpen] = useState(false)
     const [logOutLoader, setLogOutLoader] = useState(false)
@@ -28,11 +28,19 @@ const Main = () => {
           console.log(error.message)
           console.log(error)
         }
-      };
+    };
 
     useEffect(() => {
         getUserInfo()
     },[])
+
+    useEffect(() => {
+        getUserInfoFunction(getUserInfo)
+    },[])
+
+    useEffect(() => {
+        setExtractedUserInfo(userInfo)
+    },[userInfo])
 
     const handleOpenUserSettings = () => {
         if (userSettingsModalOpen) {

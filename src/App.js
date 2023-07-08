@@ -9,6 +9,8 @@ const Main = lazy(() => import('./components/Main'))
 
 const App = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [userInfoFunction, setUserInfoFunction] = useState()
+  const [extractedUserInfo, setExtractedUserInfo] = useState()
 
   const RedirectToHome = () => {
     const navigate = useNavigate();
@@ -30,6 +32,10 @@ const App = () => {
     };
   }, []);
 
+  const getUserInfoFunction = (userInfoFunction) => {
+    setUserInfoFunction(() => userInfoFunction)
+  }
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -37,8 +43,10 @@ const App = () => {
             <Routes>
               <Route path="/sign-up" element={<Authenticate windowWidth={windowWidth}/>} />
               <Route path="/log-in" element={<Authenticate windowWidth={windowWidth}/>} />
-              <Route path="/" element={<Main windowWidth={windowWidth}/>}>
-                <Route path='expense-tracker' element={<ExpenseTracker windowWidth={windowWidth}/>} />
+              <Route path="/" element={<Main windowWidth={windowWidth} getUserInfoFunction={getUserInfoFunction} 
+              setExtractedUserInfo={setExtractedUserInfo}/>}>
+                <Route path='expense-tracker' element={<ExpenseTracker windowWidth={windowWidth} userInfoFunction={userInfoFunction} 
+                extractedUserInfo={extractedUserInfo}/>} />
               </Route>
               <Route path='*' element={<RedirectToHome />}/>
             </Routes>
