@@ -28,35 +28,54 @@ app.use(expenseRoutes)
 
 app.get('/user-info', async (req, res) => {
     if (req.isAuthenticated()) {
-      try {
-        const rows = await db('users')
-            .where('users.id', req.user.id) // Assumes req.user.id is available
-            .join('expenses', 'users.id', '=', 'expenses.user_id')
-            .select('users.username', 'users.email', 'users.joined', 'expenses.expense_type', 'expenses.expense_amount', 'expenses.expense_description', 'expenses.expense_date')
-            
+        try {
+            const rows = await db('users')
+                .where('users.id', req.user.id)
+                .join('expenses', 'users.id', '=', 'expenses.user_id')
+                .select('users.username', 'users.email', 'users.joined', 'expenses.expense_type', 'expenses.expense_amount', 'expenses.expense_description', 'expenses.expense_date', 'expenses.id')
 
-            const userDetails = {
-              id: rows[0].id,
-              username: rows[0].username,
-              email: rows[0].email,
-              date: rows[0].date,
-              expenses: rows.map(row => ({
-                  expense_type: row.expense_type,
-                  expense_amount: row.expense_amount,
-                  expense_description: row.expense_description,
-                  expense_date: row.expense_date
-              }))
-          };
-
-          res.json(userDetails);
-      } catch(err) {
-          console.log(err);
-          res.status(500).send('Server error.');
-      }
+            if (rows.length > 0) {
+                const userDetails = {
+                    id: rows[0].id,
+                    username: rows[0].username,
+                    email: rows[0].email,
+                    date: rows[0].joined,
+                    expenses: rows.map(row => ({
+                        expense_type: row.expense_type,
+                        expense_amount: row.expense_amount,
+                        expense_description: row.expense_description,
+                        expense_date: row.expense_date,
+                        expense_id: row.id
+                    }))
+                };
+                res.json(userDetails);
+            } else {
+                // If no expenses are returned, fetch user info separately
+                const user = await db('users')
+                    .where('users.id', req.user.id)
+                    .select('users.username', 'users.email', 'users.joined').first();
+                
+                if (user) {
+                    res.json({
+                        id: user.id,
+                        username: user.username,
+                        email: user.email,
+                        date: user.joined,
+                        expenses: []
+                    });
+                } else {
+                    // If no user is found, send a meaningful message
+                    res.json({ message: 'No user found' });
+                }
+            }
+        } catch(err) {
+            console.log(err);
+            res.status(500).send('Server error.');
+        }
     } else {
-      res.status(401).send('Unauthorized');
+        res.status(401).send('Unauthorized');
     }
-})
+});
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

@@ -66,7 +66,7 @@ const Main = ({ setExtractedUserInfo, getUserInfoFunction }) => {
 
     if (!userInfo) {
         return <div className="loaderWrapper"><span class="loader"></span></div>
-      }
+    }
 
     return (
         <section className="mainWrapper">

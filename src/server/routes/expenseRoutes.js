@@ -19,4 +19,14 @@ router.post('/add-expense', async (req, res) => {
     }
 })
 
+router.delete('/delete-expense', async (req, res) => {
+    try {
+        await db('expenses').whereIn('id', req.body).del();
+        res.status(200).send('Expenses deleted successfully.');
+    } catch (err) {
+        console.log(err)
+        res.status(500).send('Server error.');
+    }
+})
+
 module.exports = router

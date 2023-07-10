@@ -6,7 +6,9 @@ import { Chart as Chartjs, BarElement, CategoryScale, LinearScale, Tooltip, Lege
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Bar, Pie } from 'react-chartjs-2';
 import axios from 'axios';
-import '../styles/ExpenseTracker.css'
+import '../../styles/ExpenseTracker/ExpenseTracker.css'
+import AddExpense from "./AddExpense";
+import DeleteExpense from "./DeleteExpense";
 
 Chartjs.register(
     BarElement, CategoryScale, LinearScale, Tooltip, Legend, ArcElement, ChartDataLabels
@@ -14,6 +16,11 @@ Chartjs.register(
 
 const ExpenseTracker = ({ extractedUserInfo, userInfoFunction }) => {
     const [addExpenseModalOpen, setAddExpenseModalOpen] = useState(false)
+    const [deleteExpenseModalOpen, setDeleteExpenseModalOpen] = useState(false)
+    const [deleteExpensesListOpen, setDeleteExpensesListOpen] = useState(false)
+    const [deleteExpenseLoader, setDeleteExpenseLoader] = useState(false)
+    const [deleteExpensesArr, setDeleteExpenseArr] = useState([])
+    const [deleteExpenseCountColor, setDeleteExpenseCountColor] = useState(false)
     const [expenseTypeMenuOpen, setExpenseTypeMenuOpen] = useState(false)
     const [expenseType, setExpenseType] = useState('Expense Type')
     const [redExpenseAmountPlaceHolder, setRedExpenseAmountPlaceHolder] = useState(false)
@@ -22,9 +29,9 @@ const ExpenseTracker = ({ extractedUserInfo, userInfoFunction }) => {
     const [expenseDescriptionCharCount, setExpenseDescriptionCharCount] = useState(0);
     const [expenses, setExpenses] = useState([])
     const [expenseDescriptionModalOpen, setExpenseDescriptionModalOpen] = useState(false)
-    const [timePeriod, setTimePeriod] = useState('today')
+    const [timePeriod, setTimePeriod] = useState('year')
     const [timeFilterMenuOpen, setTimeFilterMenuOpen] = useState(false)
-    const [timeFilterTxt, setTimeFilterTxt] = useState('Today')
+    const [timeFilterTxt, setTimeFilterTxt] = useState('This Year')
     const [expenseSum, setExpenseSum] = useState()
     const [dataArr, setDataArr] = useState([])
     const [pieChartData, setPieChartData] = useState()
@@ -87,27 +94,7 @@ const ExpenseTracker = ({ extractedUserInfo, userInfoFunction }) => {
             const response = await axios.post('http://localhost:5000/add-expense', expense, { withCredentials: true })
             console.log(response)
             if (response.status === 200) {
-                if (expenseType === 'Expense Type' && !expenseDescription) {
-                    setExpenses([...expenses, {expense_type: "Miscellaneous", expense_amount: expenseAmount.value, 
-                        expense_description: "No description made...", expense_date: new Date()}])
-                    closeAddExpenseModal()
-                    setAddExpenseLoader(false)
-                    return
-                } else if (expenseType === 'Expense Type') {
-                    setExpenses([...expenses, {expense_type: "Miscellaneous", expense_amount: expenseAmount.value, 
-                        expense_description: expenseDescription, expense_date: new Date()}])
-                    closeAddExpenseModal()
-                    setAddExpenseLoader(false)
-                    return
-                } else if (!expenseDescription) {
-                    setExpenses([...expenses, {expense_type: expenseType, expense_amount: expenseAmount.value, 
-                        expense_description: "No description made...", expense_date: new Date()}])
-                    closeAddExpenseModal()
-                    setAddExpenseLoader(false)
-                    return
-                }
-                setExpenses([...expenses, {expense_type: expenseType, expense_amount: expenseAmount.value, 
-                    expense_description: expenseDescription, expense_date: new Date()}])
+                userInfoFunction()
                 closeAddExpenseModal()
             }
             setAddExpenseLoader(false)
@@ -270,6 +257,7 @@ const ExpenseTracker = ({ extractedUserInfo, userInfoFunction }) => {
     };
 
     const getPieChartData = (timePeriod) => {
+        console.log(timePeriod)
         let expensesByType = {};
         const now = new Date();
     
@@ -279,6 +267,7 @@ const ExpenseTracker = ({ extractedUserInfo, userInfoFunction }) => {
             let includeExpense = false;
             if (timePeriod === 'today') {
                 includeExpense = expenseDate.toDateString() === now.toDateString();
+                console.log('include Expense:', includeExpense)
             } else if (timePeriod === 'week') {
                 const daysDiff = Math.floor((now - expenseDate) / (1000 * 60 * 60 * 24));
                 includeExpense = daysDiff < 7;
@@ -295,10 +284,10 @@ const ExpenseTracker = ({ extractedUserInfo, userInfoFunction }) => {
                 expensesByType[expense.expense_type] += Number(expense.expense_amount);
             }
         });
-    
+        console.log(expensesByType)
         const dataArr = Object.values(expensesByType); // get the amounts
         const labelsArr = Object.keys(expensesByType); // get the labels
-    
+        console.log('data:', dataArr, 'lables:', labelsArr)
         setPieChartData({
             labels: labelsArr,
             datasets: [
@@ -356,7 +345,69 @@ const ExpenseTracker = ({ extractedUserInfo, userInfoFunction }) => {
             setTimeFilterMenuOpen(true)
         }
     }
+
+    const toggleDeleteExpensesMenuOpen = () => {
+        if (deleteExpensesListOpen) {
+            setDeleteExpensesListOpen(false)
+        } else {
+            setDeleteExpensesListOpen(true)
+        }
+    }
+
+    const addExpenseToDeletedExpensesArr = (expenseId) => {
+        console.log('overall exe')
+        setDeleteExpenseArr(prevArr => {
+            console.log('prevArr:', prevArr, 'expenseId:', expenseId)
+            const foundId = prevArr.find(id => id === expenseId);
+            if (foundId) {
+                return prevArr.filter(id => id !== foundId);
+            } else {
+                return [...prevArr, expenseId];
+            }
+        });
+        console.log(deleteExpensesArr)
+    }
+
+    const deleteExpenses = async (event) => {
+        event.preventDefault()
+        if (deleteExpensesArr.length === 0) {
+            setDeleteExpenseCountColor(true)
+            return
+        }
+        setDeleteExpenseLoader(true)
+        try {
+            const response = await axios({
+                method: 'delete',
+                url: 'http://localhost:5000/delete-expense',
+                data: deleteExpensesArr,
+                withCredentials: true
+            });
+            console.log(response)
+            if (response.status === 200) {
+                setExpenses(prevExpenses => 
+                    prevExpenses.filter(expense => !deleteExpensesArr.includes(expense.expense_id))
+                );
+                setDeleteExpenseModalOpen(false)
+                setDeleteExpensesListOpen(false)
+                setDeleteExpenseArr([])
+            }
+            setDeleteExpenseLoader(false)
+        } catch (err) {
+            console.log(err)
+            setDeleteExpenseLoader(false)
+        }
+    }
+
+    useEffect(() => {
+        if (deleteExpensesArr.length !== 0) {
+            setDeleteExpenseCountColor(false)
+        }
+    },[deleteExpensesArr])
     
+    if (!pieChartData || !yourBarChartData || !yourBarChartOptions) {
+        return <div className="loaderWrapper"><span class="loader"></span></div>
+    }
+
     return (
         <div className="expenseTrackerWrapper">
             <section className="expenseTrackerSection">
@@ -389,7 +440,7 @@ const ExpenseTracker = ({ extractedUserInfo, userInfoFunction }) => {
                 <div className="renderedExpensesWrapper">
                     <div className="expenseWrapper"> 
                         <h3 className="expenseTitle">Expenses</h3>
-                        <button className="deleteExpenseBtn">Delete Expense</button>
+                        <button className="deleteExpenseBtn" onClick={() => setDeleteExpenseModalOpen(true)}>Delete Expense</button>
                         <button className="addExpenseBtn" onClick={() => setAddExpenseModalOpen(true)}>Add Expense</button>
                     </div>  
                 <div>
@@ -422,7 +473,7 @@ const ExpenseTracker = ({ extractedUserInfo, userInfoFunction }) => {
                         const formattedAmount = Number(expense.expense_amount).toLocaleString('en-US');
 
                         return (
-                            <div className="renderedExpenseContent" key={index}>
+                            <div className="renderedExpenseContent" key={expense.expense_id}>
                                 <span className="renderedExpenseType">{expense.expense_type}</span>
                                 <span className="renderedExpenseAmount">${formattedAmount}</span>
                                 <span className="renderedExpenseDate">{formattedDate}</span>
@@ -448,83 +499,21 @@ const ExpenseTracker = ({ extractedUserInfo, userInfoFunction }) => {
                 </div>
             </div>
             {addExpenseModalOpen && (
-                <div className="addExpenseModalWrapper">
-                    <form className="addExpenseModalContent" onSubmit={addExpense}>
-                        <h3 className="addExpenseModalTitle">Add an Expense</h3>
-                        <div className="addExpenseModalMainContent">
-                            <button type="button" className={`addExpenseTypeModalBtn ${expenseTypeMenuOpen ? 'open' : ''}`} 
-                            onClick={() => handleExpenseTypeMenuToggle()}>
-                                {expenseType}
-                                {expenseTypeMenuOpen ? (
-                                    <FontAwesomeIcon className="addExpenseModalAngleUpIcon" icon={faAngleUp} />
-                                ) : (
-                                    <FontAwesomeIcon className="addExpenseModalAngleDownIcon" icon={faAngleDown} />
-                                )}
-                                {expenseTypeMenuOpen &&(
-                                    <ul className="addExpenseTypeDropDownWrapper">
-                                        <li className="addExpenseDropDownItem" 
-                                            onClick={() => {setExpenseType("Debt Payments"); setExpenseTypeMenuOpen(false)}}>Debt Payments</li>
-                                        <li className="addExpenseDropDownItem" 
-                                            onClick={() => {setExpenseType("Education"); setExpenseTypeMenuOpen(false)}}>Education</li>
-                                        <li className="addExpenseDropDownItem" 
-                                            onClick={() => {setExpenseType("Entertainment"); setExpenseTypeMenuOpen(false)}}>Entertainment</li>
-                                        <li className="addExpenseDropDownItem" 
-                                            onClick={() => {setExpenseType("Food"); setExpenseTypeMenuOpen(false)}}>Food</li>
-                                        <li className="addExpenseDropDownItem" 
-                                            onClick={() => {setExpenseType("Gifts & Donations"); setExpenseTypeMenuOpen(false)}}>Gifts & Donations</li>
-                                        <li className="addExpenseDropDownItem" 
-                                            onClick={() => {setExpenseType("Healthcare"); setExpenseTypeMenuOpen(false)}}>Healthcare</li>
-                                        <li className="addExpenseDropDownItem" 
-                                            onClick={() => {setExpenseType("Housing"); setExpenseTypeMenuOpen(false)}}>Housing</li>
-                                        <li className="addExpenseDropDownItem" 
-                                            onClick={() => {setExpenseType("Insurance"); setExpenseTypeMenuOpen(false)}}>Insurance</li>
-                                        <li className="addExpenseDropDownItem" 
-                                            onClick={() => {setExpenseType("Investments"); setExpenseTypeMenuOpen(false)}}>Investments</li>
-                                        <li className="addExpenseDropDownItem" 
-                                            onClick={() => {setExpenseType("Miscellaneous"); setExpenseTypeMenuOpen(false)}}>Miscellaneous</li>
-                                        <li className="addExpenseDropDownItem" 
-                                            onClick={() => {setExpenseType("Personal Care"); setExpenseTypeMenuOpen(false)}}>Personal Care</li>
-                                        <li className="addExpenseDropDownItem" 
-                                            onClick={() => {setExpenseType("Savings"); setExpenseTypeMenuOpen(false)}}>Savings</li>
-                                        <li className="addExpenseDropDownItem" 
-                                            onClick={() => {setExpenseType("Shopping"); setExpenseTypeMenuOpen(false)}}>Shopping</li>
-                                        <li className="addExpenseDropDownItem" 
-                                            onClick={() => {setExpenseType("Transportation"); setExpenseTypeMenuOpen(false)}}>Transportation</li>
-                                        <li className="addExpenseDropDownItem" 
-                                            onClick={() => {setExpenseType("Travel"); setExpenseTypeMenuOpen(false)}}>Travel</li>
-                                        <li className="addExpenseDropDownItem" 
-                                            onClick={() => {setExpenseType("Utilities"); setExpenseTypeMenuOpen(false)}}>Utilities</li>
-                                    </ul>
-                                )}
-                            </button>
-                            <label htmlFor="Expense Amount" className="addExpenseModalLabel">Amount<span className="expenseRequireTag"> *</span></label>
-                            <input type="text" name="Expense Amount" placeholder={expenseAmount.placeholder} 
-                            className={`addExpenseModalInput ${redExpenseAmountPlaceHolder ? 'field' : ''}`} 
-                            onChange={(e) => {
-                                const re = /^[0-9\b]+$/;
-                                if (e.target.value === '' || re.test(e.target.value)) {
-                                   setExpenseAmount({ ...expenseAmount, value: e.target.value })
-                                }
-                            }} 
-                            value={expenseAmount.value}/>
-                            <label htmlFor="description" className="expenseDescriptionLabel">Expense Description
-                            <span className={`expenseDescriptionCharCount ${expenseDescription.length === 250 ? 'maxCount' : ''}`}>
-                                {expenseDescriptionCharCount} / 250</span></label>
-                            <textarea className="expenseDescription" name="description" value={expenseDescription} 
-                            onChange={(e) => setExpenseDescription(e.target.value)} maxLength={MAX_DESCRIPTION_CHARACTERS}></textarea>
-                        </div>
-                        <div className="addExpenseModalFooter">
-                            <button type="button" className="addExpenseModalCloseBtn" 
-                            onClick={() => closeAddExpenseModal()}>
-                                Close</button>
-                            {addExpenseLoader ? (
-                                <button type="button" className="addExpenseModalAddExpenseBtn"><span class="modalLoader"></span></button>
-                            ) : (
-                                <button type="submit" className="addExpenseModalAddExpenseBtn">Add Expense</button>
-                            )}
-                        </div>
-                    </form>
-                </div>
+                <AddExpense addExpense={addExpense} expenseTypeMenuOpen={expenseTypeMenuOpen} expenseType={expenseType} 
+                handleExpenseTypeMenuToggle={handleExpenseTypeMenuToggle} setExpenseType={setExpenseType}
+                setExpenseTypeMenuOpen={setExpenseTypeMenuOpen} redExpenseAmountPlaceHolder={redExpenseAmountPlaceHolder}
+                setExpenseAmount={setExpenseAmount} expenseAmount={expenseAmount} expenseDescription={expenseDescription}
+                setExpenseDescription={setExpenseDescription} MAX_DESCRIPTION_CHARACTERS={MAX_DESCRIPTION_CHARACTERS}
+                closeAddExpenseModal={closeAddExpenseModal} addExpenseLoader={addExpenseLoader}
+                expenseDescriptionCharCount={expenseDescriptionCharCount}/>
+            )}
+            {deleteExpenseModalOpen && (
+                <DeleteExpense expenses={expenses} deleteExpensesArr={deleteExpensesArr}
+                addExpenseToDeletedExpensesArr={addExpenseToDeletedExpensesArr} deleteExpenses={deleteExpenses} 
+                deleteExpenseCountColor={deleteExpenseCountColor} toggleDeleteExpensesMenuOpen={toggleDeleteExpensesMenuOpen}
+                deleteExpensesListOpen={deleteExpensesListOpen} setDeleteExpenseCountColor={setDeleteExpenseCountColor} 
+                setDeleteExpenseArr={setDeleteExpenseArr} setDeleteExpensesListOpen={setDeleteExpensesListOpen}
+                deleteExpenseLoader={deleteExpenseLoader} setDeleteExpenseModalOpen={setDeleteExpenseModalOpen}/>
             )}
             </section>
             <section className="expenseChartSection">
@@ -534,14 +523,12 @@ const ExpenseTracker = ({ extractedUserInfo, userInfoFunction }) => {
                         options={yourBarChartOptions}>
                     </Bar>
                 </div>
-                <div className="expensePieChartWrapper">
-                    {pieChartData &&(
+                <div className={`expensePieChartWrapper ${pieChartData.labels.length === 0 ? 'empty' : ''}`}>
                         <Pie
                             options={pieChartOptions}
                             data={pieChartData}
                             >
                         </Pie>
-                    )}
                 </div>
             </section>
         </div>

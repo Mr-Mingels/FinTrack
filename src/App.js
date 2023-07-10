@@ -1,7 +1,7 @@
 import './App.css'
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import React, { lazy, Suspense, useEffect, useState  } from "react";
-import ExpenseTracker from './components/ExpenseTracker'
+import ExpenseTracker from './components/ExpenseTracker/ExpenseTracker.js'
 
 const Authenticate = lazy(() => import('./components/Authenticate'));
 const Main = lazy(() => import('./components/Main'))
