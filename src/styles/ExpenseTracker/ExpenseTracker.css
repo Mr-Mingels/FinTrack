@@ -165,10 +165,6 @@
     border-bottom: 1px solid rgba(109, 157, 197, 0.4);
 }
 
-.renderedExpenseContent {
-    padding: 0 20px;
-}
-
 .renderedExpenseContent.inArr {
     background-color: #6d9dc5;
     color: white;
@@ -200,10 +196,6 @@
     border-right: 1px solid rgba(109, 157, 197, 0.4);
 }
 
-.renderedExpenseType {
-    width: 240px;
-}
-
 .expenseDescriptionIcon {
     width: 20px;
     height: 20px;
@@ -215,18 +207,9 @@
     border-right: 1px solid rgba(109, 157, 197, 0.4);
 }
 
-.renderedExpenseAmount {
-    width: 196px;
-}
-
 .renderedExpenseDate {
     width: 120px;
     border-right: 1px solid rgba(109, 157, 197, 0.4);
-}
-
-.renderedExpenseDate {
-    width: 120px;
-    border: none;
 }
 
 .renderedExpenseDesc {
@@ -238,31 +221,9 @@
 
 
 
-/* DELETE EXPENSE MODAL */
-
-
-.deleteExpenseBtn {
-    background-color: transparent;
-    border: 2px solid #4b7090;
-    color: #4b7090;
-    padding: 10px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-}
-
-.deleteExpenseBtn {
-    margin-left: auto;
-}
-
-.deleteExpenseBtn:hover {
-    background-color: #4b7090;
-    color: white;
-}
-
-
-
 /* EXPENSE DESCRIPTION MODAL */
+
+
 
 .expenseDescriptionModalWrapper {
     position: fixed;
@@ -282,17 +243,6 @@
     font-weight: 600;
     color: #6d9dc5;
     margin-bottom: 16px;
-}
-
-.expenseDescriptionLabel {
-    height: 22px;
-    margin-top: 22px;
-    font-size: 14px;
-}
-
-.expenseDescriptionLabel {
-    display: flex;
-    justify-content: space-between;
 }
 
 .expenseDescription, .expenseDescriptionModalDescription {

@@ -15,7 +15,6 @@
     background-color: white;
     border-radius: 8px;
     padding: 30px;
-
 }
 
 .addExpenseModalTitle {
@@ -93,6 +92,11 @@
     font-size: 14px;
 }
 
+.expenseDescriptionLabel {
+    display: flex;
+    justify-content: space-between;
+}
+
 .expenseRequireTag {
     color: red;
 }
@@ -104,6 +108,7 @@
     border: 1px solid black;
     display: flex;
     border-radius: 4px;
+    transition: all 0.2s ease-in-out;
 }
 
 .addExpenseModalInput.field::placeholder {
@@ -129,6 +134,7 @@
     border: 1px solid black;
     border-radius: 4px;
     height: 100px;
+    transition: all 0.2s ease-in-out;
 }
 
 .expenseDescription::-webkit-scrollbar {
@@ -169,16 +175,11 @@
 }
 
 .addExpenseBtn {
-    background-color: transparent;
+    background-color: #4b7090;
     border: 2px solid #4b7090;
-    color: #4b7090;
+    color: white;
     padding: 10px 12px;
     border-radius: 20px;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
-}
-
-.addExpenseBtn {
-    background-color: #4b7090;
-    color: white;
 }

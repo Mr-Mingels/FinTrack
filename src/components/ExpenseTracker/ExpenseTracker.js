@@ -14,7 +14,7 @@ Chartjs.register(
     BarElement, CategoryScale, LinearScale, Tooltip, Legend, ArcElement, ChartDataLabels
 )
 
-const ExpenseTracker = ({ extractedUserInfo, userInfoFunction }) => {
+const ExpenseTracker = ({ userInfo, getUserInfo }) => {
     const [addExpenseModalOpen, setAddExpenseModalOpen] = useState(false)
     const [deleteExpenseModalOpen, setDeleteExpenseModalOpen] = useState(false)
     const [deleteExpensesListOpen, setDeleteExpensesListOpen] = useState(false)
@@ -43,14 +43,10 @@ const ExpenseTracker = ({ extractedUserInfo, userInfoFunction }) => {
     });
 
     useEffect(() => {
-        userInfoFunction()
-    },[])
-
-    useEffect(() => {
-        if (extractedUserInfo) {
-            setExpenses(extractedUserInfo.expenses)
+        if (userInfo) {
+            setExpenses(userInfo.expenses)
         }
-    },[extractedUserInfo])
+    },[userInfo])
 
     useEffect(() => {
         if (expenseAmount.value !== '') {
@@ -94,7 +90,7 @@ const ExpenseTracker = ({ extractedUserInfo, userInfoFunction }) => {
             const response = await axios.post('http://localhost:5000/add-expense', expense, { withCredentials: true })
             console.log(response)
             if (response.status === 200) {
-                userInfoFunction()
+                getUserInfo()
                 closeAddExpenseModal()
             }
             setAddExpenseLoader(false)
@@ -287,6 +283,7 @@ const ExpenseTracker = ({ extractedUserInfo, userInfoFunction }) => {
         console.log(expensesByType)
         const dataArr = Object.values(expensesByType); // get the amounts
         const labelsArr = Object.keys(expensesByType); // get the labels
+        console.log('labels:', labelsArr, "data:", dataArr)
         console.log('data:', dataArr, 'lables:', labelsArr)
         setPieChartData({
             labels: labelsArr,
@@ -384,9 +381,7 @@ const ExpenseTracker = ({ extractedUserInfo, userInfoFunction }) => {
             });
             console.log(response)
             if (response.status === 200) {
-                setExpenses(prevExpenses => 
-                    prevExpenses.filter(expense => !deleteExpensesArr.includes(expense.expense_id))
-                );
+                getUserInfo()
                 setDeleteExpenseModalOpen(false)
                 setDeleteExpensesListOpen(false)
                 setDeleteExpenseArr([])

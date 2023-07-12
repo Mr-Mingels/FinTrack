@@ -5,8 +5,10 @@ import React, { lazy, Suspense, useEffect, useState  } from "react";
 import axios from 'axios';
 import '../styles/Main.css'
 import logo from '../assets/logo.png'
+import ExpenseTracker from "./ExpenseTracker/ExpenseTracker";
+import BudgetPlanner from "./BudgetPlanner/BudgetPlanner";
 
-const Main = ({ setExtractedUserInfo, getUserInfoFunction }) => {
+const Main = ({ windowWidth }) => {
     const [userInfo, setUserInfo] = useState()
     const [userSettingsModalOpen, setUserSettingsModalOpen] = useState(false)
     const [logOutLoader, setLogOutLoader] = useState(false)
@@ -33,14 +35,6 @@ const Main = ({ setExtractedUserInfo, getUserInfoFunction }) => {
     useEffect(() => {
         getUserInfo()
     },[])
-
-    useEffect(() => {
-        getUserInfoFunction(getUserInfo)
-    },[])
-
-    useEffect(() => {
-        setExtractedUserInfo(userInfo)
-    },[userInfo])
 
     const handleOpenUserSettings = () => {
         if (userSettingsModalOpen) {
@@ -99,19 +93,11 @@ const Main = ({ setExtractedUserInfo, getUserInfoFunction }) => {
                 </div>
             </nav>
             <section className="mainContentWrapper">
-                <div className="mainSideBarWrapper">
-                    <div className="mainSideBarContent">
-                        <ul className="sideBarListWrapper">
-                            <Link to='/expense-tracker' onMouseDown={(e) => e.preventDefault()} className="sideBarListItem"><FontAwesomeIcon 
-                            className="sideBarListItemIcon" icon={faMoneyCheckDollar} />Expense Tracker</Link>
-                            <li className="sideBarListItem"><FontAwesomeIcon className="sideBarListItemIcon" icon={faMoneyBillTrendUp} />Asset Manager</li>
-                            <li className="sideBarListItem"><FontAwesomeIcon className="sideBarListItemIcon" icon={faArrowTrendUp} />Asset Tracker</li>
-                            <li className="sideBarListItem"><FontAwesomeIcon className="sideBarListItemIcon" icon={faCalculator} />Tax Calculator</li>
-                        </ul>
-                    </div>
-                </div>
                 <div className="renderedContentWrapper">
-                    <Outlet />
+                    <ExpenseTracker windowWidth={windowWidth} getUserInfo={getUserInfo} 
+                    userInfo={userInfo}/>
+                    <BudgetPlanner windowWidth={windowWidth} getUserInfo={getUserInfo} 
+                    userInfo={userInfo}/>
                 </div>
             </section>
         </section>

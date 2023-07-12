@@ -7,6 +7,7 @@ const db = require('./controllers/dbController')
 const { localStrategy, session: passportSession } = require('./controllers/authController');
 const authRoutes = require('./routes/authRoutes.js')
 const expenseRoutes = require('./routes/expenseRoutes.js')
+const budgetRoutes = require('./routes/budgetRoutes')
 const app = express()
 
 const PORT = process.env.PORT || 5000;
@@ -25,49 +26,57 @@ app.use(localStrategy)
 app.use(passportSession)
 app.use(authRoutes)
 app.use(expenseRoutes)
+app.use(budgetRoutes)
 
 app.get('/user-info', async (req, res) => {
     if (req.isAuthenticated()) {
         try {
-            const rows = await db('users')
+            // Fetch the user details regardless
+            const user = await db('users')
+                .where('users.id', req.user.id)
+                .select('users.username', 'users.email', 'users.joined').first();
+            
+            const expensesRows = await db('users')
                 .where('users.id', req.user.id)
                 .join('expenses', 'users.id', '=', 'expenses.user_id')
-                .select('users.username', 'users.email', 'users.joined', 'expenses.expense_type', 'expenses.expense_amount', 'expenses.expense_description', 'expenses.expense_date', 'expenses.id')
+                .select('expenses.expense_type', 'expenses.expense_amount', 'expenses.expense_description', 'expenses.expense_date', 'expenses.id')
 
-            if (rows.length > 0) {
-                const userDetails = {
-                    id: rows[0].id,
-                    username: rows[0].username,
-                    email: rows[0].email,
-                    date: rows[0].joined,
-                    expenses: rows.map(row => ({
-                        expense_type: row.expense_type,
-                        expense_amount: row.expense_amount,
-                        expense_description: row.expense_description,
-                        expense_date: row.expense_date,
-                        expense_id: row.id
-                    }))
-                };
-                res.json(userDetails);
-            } else {
-                // If no expenses are returned, fetch user info separately
-                const user = await db('users')
-                    .where('users.id', req.user.id)
-                    .select('users.username', 'users.email', 'users.joined').first();
-                
-                if (user) {
-                    res.json({
-                        id: user.id,
-                        username: user.username,
-                        email: user.email,
-                        date: user.joined,
-                        expenses: []
-                    });
-                } else {
-                    // If no user is found, send a meaningful message
-                    res.json({ message: 'No user found' });
-                }
+            const budgetsRows = await db('users')
+                .where('users.id', req.user.id)
+                .join('budgets', 'users.id', '=', 'budgets.user_id')
+                .select('budgets.max_spending', 'budgets.time_frame', 'budgets.created_at', 'budgets.budget_type', 'budgets.id')
+
+            const userDetails = {
+                id: user.id,
+                username: user.username,
+                email: user.email,
+                date: user.joined,
+                expenses: [],
+                budgets: []
+            };
+
+            if (expensesRows.length > 0) {
+                userDetails.expenses = expensesRows.map(row => ({
+                    expense_type: row.expense_type,
+                    expense_amount: row.expense_amount,
+                    expense_description: row.expense_description,
+                    expense_date: row.expense_date,
+                    expense_id: row.id
+                }));
             }
+
+            if (budgetsRows.length > 0) {
+                userDetails.budgets = budgetsRows.map(row => ({
+                    max_spending: row.max_spending,
+                    time_frame: row.time_frame,
+                    created_at: row.created_at,
+                    budget_type: row.budget_type,
+                    budget_id: row.id
+                }));
+            }
+            
+            res.json(userDetails);
+
         } catch(err) {
             console.log(err);
             res.status(500).send('Server error.');
@@ -76,6 +85,7 @@ app.get('/user-info', async (req, res) => {
         res.status(401).send('Unauthorized');
     }
 });
+
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
