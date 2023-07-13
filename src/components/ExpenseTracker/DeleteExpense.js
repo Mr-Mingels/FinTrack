@@ -2,7 +2,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import '../../styles/ExpenseTracker/DeleteExpense.css'
 
-const DeleteExpense = ({ expenses, deleteExpensesArr, addExpenseToDeletedExpensesArr, deleteExpenses, deleteExpenseCountColor, toggleDeleteExpensesMenuOpen, deleteExpensesListOpen, setDeleteExpenseCountColor, setDeleteExpenseArr, setDeleteExpensesListOpen, deleteExpenseLoader, setDeleteExpenseModalOpen }) => {
+const DeleteExpense = ({ expenses, deleteExpensesArr, addExpenseToDeletedExpensesArr, deleteExpenses, deleteExpenseCountColor, 
+    toggleDeleteExpensesMenuOpen, deleteExpensesListOpen, setDeleteExpenseCountColor, setDeleteExpenseArr, setDeleteExpensesListOpen, 
+    deleteExpenseLoader, setDeleteExpenseModalOpen, faFileLines, openExpenseDescriptionModal }) => {
     return (
         <div className="deleteExpenseModalWrapper">
             <form className="deleteExpenseModalContent" onSubmit={deleteExpenses}>
@@ -47,13 +49,17 @@ const DeleteExpense = ({ expenses, deleteExpensesArr, addExpenseToDeletedExpense
 
                                         return (
                                             <div 
-                                                className={`renderedExpenseContent deleteExpenses ${inDeleteExpensesArr ? 'inArr' : ''}`} 
+                                                className={`deleteModalRenderedContent ${inDeleteExpensesArr ? 'inArr' : ''}`} 
                                                 key={expense.expense_id} 
                                                 onClick={(event) => {event.stopPropagation(); 
                                                 addExpenseToDeletedExpensesArr(expense.expense_id)}}>
-                                                <span className="renderedExpenseType deleteExpenses">{expense.expense_type}</span>
-                                                <span className="renderedExpenseAmount deleteExpenses">${formattedAmount}</span>
-                                                <span className="renderedExpenseDate deleteExpenses">{formattedDate}</span>
+                                                <span className="deleteModalRenderedItem type">{expense.expense_type}</span>
+                                                <span className="deleteModalRenderedItem amount">${formattedAmount}</span>
+                                                <span className="deleteModalRenderedItem date">{formattedDate}</span>
+                                                <span className="deleteModalRenderedItem desc">
+                                                <FontAwesomeIcon className="deleteModalRenderedDescIcon" 
+                                                icon={faFileLines} onClick={(event) => {event.stopPropagation(); 
+                                                openExpenseDescriptionModal(expense.expense_description)}}/></span>
                                             </div>  
                                         ) 
                                     })}

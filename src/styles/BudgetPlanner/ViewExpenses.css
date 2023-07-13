@@ -1,0 +1,172 @@
+.viewExpensesWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(1, 1, 1, 0.5);
+    z-index: 10;
+}
+
+.viewExpensesContent {
+    background-color: white;
+    border-radius: 8px;
+    padding: 30px;
+}
+
+.viewExpensesTitle {
+    font-size: 22px;
+    font-weight: 600;
+    color: #6d9dc5;
+    margin-bottom: 16px;
+}
+
+.viewExpensesMainContent {
+
+}
+
+.allBudgetExpensesWrapper {
+    height: 300px;
+    border: 2px solid #6d9dc5;
+    border-radius: 10px;
+    overflow-y: scroll;
+    min-width: 600px;
+}
+
+.allBudgetExpensesWrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.renderedBudgetExpenseWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 0 0 20px;
+    border-bottom: 1px solid rgba(109, 157, 197, 0.4);
+}
+
+.renderedBudgetExpense {
+    font-size: 13px;
+    padding: 12px 15px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+}
+
+.renderedBudgetExpense.type {
+    width: 220px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-right: 1px solid rgba(109, 157, 197, 0.4);
+}
+
+.renderedBudgetExpense.amount {
+    width: 160px;
+    border-right: 1px solid rgba(109, 157, 197, 0.4);
+}
+
+.renderedBudgetExpense.date {
+    width: 120px;
+    border-right: 1px solid rgba(109, 157, 197, 0.4);
+}
+
+.renderedBudgetExpense.desc {
+    width: 80px;
+    display: flex;
+    justify-content: center;
+}
+
+.viewExpenseDescIcon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.viewExpensesFooter {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 28px;
+}
+
+.viewExpensesBtn {
+    background-color: transparent;
+    border: 2px solid #4b7090;
+    color: #4b7090;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease-in-out;
+}
+
+.viewExpensesBtn:hover {
+    background-color: #4b7090;
+    color: white;
+}
+
+.viewExpenseDescriptionModalWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(1, 1, 1, 0.5);
+    z-index: 20;
+}
+
+.viewExpenseDescriptionModalContent {
+    background-color: white;
+    border-radius: 8px;
+    padding: 30px;
+}
+
+.viewExpenseDescriptionModalTitle {
+    font-size: 22px;
+    font-weight: 600;
+    color: #6d9dc5;
+    margin-bottom: 16px;
+}
+
+.viewExpenseDescriptionModalDescription {
+    resize: none;
+    outline: none;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 4px;
+    width: 360px;
+    min-height: 100px;
+    height: fit-content;
+}
+
+.viewExpenseDescriptionModalFooter {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 28px;
+}
+
+.viewExpenseDescriptionModalCloseBtn {
+    background-color: transparent;
+    border: 2px solid #4b7090;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #4b7090;
+    transition: all 0.2s ease-in-out;
+}
+
+.viewExpenseDescriptionModalCloseBtn:hover {
+    background-color: #4b7090;
+    color: white;
+}

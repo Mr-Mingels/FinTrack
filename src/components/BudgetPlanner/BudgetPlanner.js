@@ -1,10 +1,13 @@
 import { BrowserRouter, Routes, Route, useNavigate, useLocation, Link, Outlet } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleUp, faAngleDown, faCalculator, faMoneyCheckDollar, faMoneyBillTrendUp, faArrowTrendUp, faFileLines } from '@fortawesome/free-solid-svg-icons';
+import { faAngleUp, faAngleDown, faCalculator, faMoneyCheckDollar, faMoneyBillTrendUp, faFileLines, faTrash } from '@fortawesome/free-solid-svg-icons';
 import React, { lazy, Suspense, useEffect, useState  } from "react";
 import axios from 'axios';
 import moment from 'moment';
 import '../../styles/BudgetPlanner/BudgetPlanner.css'
+import AddBudget from "./AddBudget";
+import AddBudgetExpense from "./AddBudgetExpense";
+import ViewExpenses from "./ViewExpenses";
 
 const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
     const [addBudgetModalOpen, setAddBudgetModalOpen] = useState(false)
@@ -22,6 +25,7 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
     const [budgetAmountRedPlaceHolder, setBudgetAmountRedPlaceHolder] = useState(false)
     const [budgetTimeFrameRedPlaceHolder, setBudgetTimeFrameRedPlaceHolder] = useState(false)
     const [expenseDescription, setExpenseDescription] = useState('');
+    const [expenseDescriptionModalOpen, setExpenseDescriptionModalOpen] = useState(false)
     const [expenseDescriptionCharCount, setExpenseDescriptionCharCount] = useState(0);
     const MAX_DESCRIPTION_CHARACTERS = 250;
     const [redExpenseAmountPlaceHolder, setRedExpenseAmountPlaceHolder] = useState(false)
@@ -29,7 +33,22 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
         value: '',
         placeholder: 'Expense Amount'
     });
-    const [openModalId, setOpenModalId] = useState(null);
+    const [addBudgetExpenseModalId, setAddBudgetExpenseModalId] = useState(null);
+    const [toggleDeleteOn, setToggleDelete] = useState(false)
+    const [deleteBudgetModalId, setDeleteBudgetModalId] = useState(null)
+    const [viewExpensesModalId, setViewExpensesModalId] = useState(null)
+
+    useEffect(() => {
+        if (addBudgetModalOpen || deleteBudgetModalId || viewExpensesModalId || addBudgetExpenseModalId) {
+            document.body.classList.add('no-scroll');
+        } else {
+            document.body.classList.remove('no-scroll');
+        }
+
+        return () => {
+            document.body.classList.remove('no-scroll');
+        }
+    }, [addBudgetModalOpen, deleteBudgetModalId, viewExpensesModalId, addBudgetExpenseModalId]);
 
     useEffect(() => {
         if (userInfo) {
@@ -71,7 +90,7 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
         }
     }
 
-    const AddBudget = async (event) => {
+    const handleAddBudget = async (event) => {
         event.preventDefault()
         setBudgetLoader(true)
         if (budgetAmount.value === '' && budgetTimeFrame === 'Choose Time Frame') {
@@ -91,6 +110,11 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
             setBudgetTimeFrame('Please Choose a Time Frame')
             setBudgetLoader(false)
             return
+        } else if (budgetTimeFrame === 'Please Choose a Time Frame') {
+            setBudgetTimeFrameRedPlaceHolder(true)
+            setBudgetTimeFrame('Please Choose a Time Frame')
+            setBudgetLoader(false)
+            return
         }
 
         const budget = {
@@ -98,6 +122,7 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
             budgetTimeFrame: budgetTimeFrame,
             budgetAmount: budgetAmount
         }
+
         try {   
             const response = await axios.post('http://localhost:5000/add-budget', budget, { withCredentials: true })
             console.log(response)
@@ -140,7 +165,7 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
             setExpenseDescription('')
         }
         setBudgetType(budgetType)
-        setOpenModalId(openModalId !== id ? id : null);
+        setAddBudgetExpenseModalId(addBudgetExpenseModalId !== id ? id : null);
     };
 
     useEffect(() => {
@@ -185,6 +210,51 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
         }
     }
 
+    const toggleDeleteBtns = () => {
+        if (toggleDeleteOn) {
+            setToggleDelete(false)
+        } else {
+            setToggleDelete(true)
+        }
+    }
+
+    const toggleDeleteBudgetModalOpen = (budgetId) => {
+        setDeleteBudgetModalId(deleteBudgetModalId !== budgetId ? budgetId : null);
+    };
+
+    const deleteBudget = async () => {
+        console.log(deleteBudgetModalId)
+        try {
+            const response = await axios({
+                method: 'delete',
+                url: 'http://localhost:5000/delete-budget',
+                data: [deleteBudgetModalId],
+                withCredentials: true
+            });
+            console.log(response)
+            if (response.status === 200) {
+                getUserInfo()
+                toggleDeleteBudgetModalOpen(null)
+            }
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    const toggleViewExpensesModalOpen = (budgetId) => {
+        setViewExpensesModalId(viewExpensesModalId !== budgetId ? budgetId : null);
+    }
+
+    const openExpenseDescriptionModal = (description) => {
+        setExpenseDescription(description)
+        setExpenseDescriptionModalOpen(true)
+    }
+
+    const closeExpenseDescriptionModal = () => {
+        setExpenseDescriptionModalOpen(false)
+        setExpenseDescription('')
+    }
+
     if (!budgets) {
         return <div className="loaderWrapper"><span class="loader"></span></div>
     }
@@ -196,99 +266,16 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
                     <h2 className="budgetsHeaderTitle">Budgets</h2>
                     <div className="budgetsHeaderBtnsWrapper">
                         <button className="budgetsBtn add" onClick={() => toggleAddBudgetModalOpen()}>Add Budget</button>
-                        <button className="budgetsBtn delete">Delete Budget</button>
+                        <button className={`budgetsBtn delete ${toggleDeleteOn ? 'toggleOn' : ''}`} 
+                        onClick={() => toggleDeleteBtns()}>Toggle Delete</button>
                     </div>
-                    {addBudgetModalOpen &&(
-                        <div className="addBudgetModalWrapper">
-                            <form className="addBudgetModalContent" onSubmit={AddBudget}>
-                                <h3 className="addBudgetModalTitle">Add a Budget</h3>
-                                <div className="addBudgetModalMainContent">
-                                    <button type="button" className={`addBudgetBudgetTypeBtn ${budgetTypeMenuOpen ? 'open' : ''}`} 
-                                    onClick={() => toggleBudgetTypeMenuOpen()}>{budgetType}
-                                    {budgetTypeMenuOpen ? (
-                                        <FontAwesomeIcon className={`addBudgetModalAngleUpIcon 
-                                        ${budgetTypeMenuOpen ? 'open' : ''}`} icon={faAngleUp} />
-                                    ) : (
-                                        <FontAwesomeIcon className={`addBudgetModalAngleDownIcon 
-                                        ${budgetTypeMenuOpen ? 'open' : ''}`} icon={faAngleDown} />
-                                    )}
-                                    {budgetTypeMenuOpen &&(
-                                        <ul className="addBudgetTypeMenuWrapper">
-                                            <li className="addBudgetMenuItem" 
-                                                onClick={() => setBudgetType('Debt Payments')}>Debt Payments</li>
-                                            <li className="addBudgetMenuItem" 
-                                                onClick={() => setBudgetType('Education')}>Education</li>
-                                            <li className="addBudgetMenuItem" 
-                                                onClick={() => setBudgetType('Entertainment')}>Entertainment</li>
-                                            <li className="addBudgetMenuItem" 
-                                                onClick={() => setBudgetType('Food')}>Food</li>
-                                            <li className="addBudgetMenuItem" 
-                                                onClick={() => setBudgetType('Gifts & Donations')}>Gifts & Donations</li>
-                                            <li className="addBudgetMenuItem" 
-                                                onClick={() => setBudgetType('Healthcare')}>Healthcare</li>
-                                            <li className="addBudgetMenuItem" 
-                                                onClick={() => setBudgetType('Housing')}>Housing</li>
-                                            <li className="addBudgetMenuItem" 
-                                                onClick={() => setBudgetType('Insurance')}>Insurance</li>
-                                            <li className="addBudgetMenuItem" 
-                                                onClick={() => setBudgetType('Investments')}>Investments</li>
-                                            <li className="addBudgetMenuItem" 
-                                                onClick={() => setBudgetType('Miscellaneous')}>Miscellaneous</li>
-                                            <li className="addBudgetMenuItem" 
-                                                onClick={() => setBudgetType('Personal Care')}>Personal Care</li>
-                                            <li className="addBudgetMenuItem" 
-                                                onClick={() => setBudgetType('Savings')}>Savings</li>
-                                            <li className="addBudgetMenuItem" 
-                                                onClick={() => setBudgetType('Shopping')}>Shopping</li>
-                                            <li className="addBudgetMenuItem" 
-                                                onClick={() => setBudgetType('Transportation')}>Transportation</li>
-                                            <li className="addBudgetMenuItem" 
-                                                onClick={() => setBudgetType('Travel')}>Travel</li>
-                                            <li className="addBudgetMenuItem" 
-                                                onClick={() => setBudgetType('Utilities')}>Utilities</li>
-                                        </ul>
-                                    )}</button>
-                                    <label className="addBudgetLabel">Budget Time Frame<span className="addBudgetRequireTag"> *</span></label>
-                                    <button type="button" className={`addBudgetBudgetTimeFrameBtn ${budgetTimeFrameMenuOpen ? 'open' : ''} 
-                                    ${budgetTimeFrameRedPlaceHolder ? 'red' : ''}`} 
-                                    onClick={() => toggleBudgetTimeFrameMenuOpen()}>{budgetTimeFrame}
-                                    {budgetTimeFrameMenuOpen ? (
-                                        <FontAwesomeIcon className={`addBudgetModalAngleUpIcon 
-                                        ${budgetTimeFrameMenuOpen ? 'open' : ''}`} icon={faAngleUp} />
-                                    ) : (
-                                        <FontAwesomeIcon className={`addBudgetModalAngleDownIcon 
-                                        ${budgetTimeFrameMenuOpen ? 'open' : ''}`} icon={faAngleDown} />
-                                    )}
-                                    {budgetTimeFrameMenuOpen &&(
-                                        <ul className="addBudgetTimeFrameMenuWrapper">
-                                            <li className="addBudgetTimeFrameItem" onClick={() => setBudgetTimeFrame('Daily')}>Daily</li>
-                                            <li className="addBudgetTimeFrameItem" onClick={() => setBudgetTimeFrame('Weekly')}>Weekly</li>
-                                            <li className="addBudgetTimeFrameItem" onClick={() => setBudgetTimeFrame('Monthly')}>Monthly</li>
-                                            <li className="addBudgetTimeFrameItem" onClick={() => setBudgetTimeFrame('Yearly')}>Yearly</li>
-                                        </ul>
-                                    )}</button>
-                                    <label htmlFor="max spending" className="addBudgetLabel">Budget Limit 
-                                    <span className="addBudgetRequireTag"> *</span></label>
-                                    <input className={`addBudgetBudgetLimitInput ${budgetAmountRedPlaceHolder ? 'red' : ''}`} 
-                                    name="max spending" type="text" value={budgetAmount.value}
-                                    placeholder={budgetAmount.placeholder} onChange={(e) => {
-                                        const re = /^[0-9\b]+$/;
-                                        if (e.target.value === '' || re.test(e.target.value)) {
-                                           setBudgetAmount({ ...budgetAmount, value: e.target.value })
-                                        }
-                                    }} ></input>
-                                </div>
-                                <div className="addBudgetModalFooter">
-                                    <button type="button" className="addBudgetModalBtn close" 
-                                    onClick={() => toggleAddBudgetModalOpen()}>Close</button>
-                                    {budgetLoader ? (
-                                        <button type="button" className="addBudgetModalBtn add"><span class="modalLoader"></span></button>
-                                    ) : (
-                                        <button type="submit" className="addBudgetModalBtn add">Add Budget</button>
-                                    )}
-                                </div>
-                            </form>
-                        </div>
+                    {addBudgetModalOpen && (
+                        <AddBudget budgetType={budgetType} setBudgetType={setBudgetType} budgetTypeMenuOpen={budgetTypeMenuOpen} 
+                        toggleBudgetTypeMenuOpen={toggleBudgetTypeMenuOpen} budgetTimeFrame={budgetTimeFrame} 
+                        budgetTimeFrameMenuOpen={budgetTimeFrameMenuOpen} toggleBudgetTimeFrameMenuOpen={toggleBudgetTimeFrameMenuOpen}
+                        setBudgetTimeFrame={setBudgetTimeFrame} budgetTimeFrameRedPlaceHolder={budgetTimeFrameRedPlaceHolder}
+                        budgetAmountRedPlaceHolder={budgetAmountRedPlaceHolder} budgetAmount={budgetAmount} setBudgetAmount={setBudgetAmount}
+                        toggleAddBudgetModalOpen={toggleAddBudgetModalOpen} budgetLoader={budgetLoader} handleAddBudget={handleAddBudget}/>
                     )}
                 </div>
                 <div className="renderedBudgetsWrapper">
@@ -326,47 +313,49 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
                                     <h4 className="budgetType">{budget.budget_type}</h4>
                                     <span className="budgetTimeFrame">{budget.time_frame} Budget</span>
                                 </div>
-                                <span className="budgetCosts">
+                                <span className={`budgetCosts ${currentSpending > budget.max_spending ? 'exceededBudget' : ''}`}>
                                     ${currentSpending.toLocaleString()} / ${budget.max_spending.toLocaleString()}</span>
                             </div>
                             <progress className="budgetProgressBar" value={currentSpending} max={budget.max_spending}></progress>
                             <div className="budgetFooterWrapper">
-                                <button className="budgetBtns view">View Expenses</button>
+                                {toggleDeleteOn && (
+                                    <button className="budgetBtns delete" 
+                                    onClick={() => toggleDeleteBudgetModalOpen(budget.budget_id)}><FontAwesomeIcon icon={faTrash} /></button>
+                                )}
+                                <button className="budgetBtns view" 
+                                onClick={() => toggleViewExpensesModalOpen(budget.budget_id)}>
+                                    View Expenses</button>
                                 <button className="budgetBtns add" 
                                 onClick={() => toggleAddBudgetExpenseModalOpen(budget.budget_id, budget.budget_type)}>Add Expense</button>
                             </div>
-                            {openModalId === budget.budget_id && (
-                                <div className="addBudgetExpenseModalWrapper">
-                                    <form className="addBudgetExpenseModalContent" onSubmit={addExpense}>
-                                        <h3 className="addBudgetExpenseModalTitle">Add an Expense</h3>
-                                        <div className="addBudgetExpenseModalMainContent">
-                                            <label htmlFor="Expense Amount" className="addBudgetExpenseModalLabel">Amount<span className="requireTag"> *</span></label>
-                                            <input type="text" name="Expense Amount" placeholder={expenseAmount.placeholder} 
-                                            className={`addBudgetExpenseModalInput ${redExpenseAmountPlaceHolder ? 'field' : ''}`} 
-                                            onChange={(e) => {
-                                                const re = /^[0-9\b]+$/;
-                                                if (e.target.value === '' || re.test(e.target.value)) {
-                                                    setExpenseAmount({ ...expenseAmount, value: e.target.value })
-                                                }
-                                            }} 
-                                            value={expenseAmount.value}/>
-                                            <label htmlFor="description" className="budgetExpenseDescriptionLabel">Expense Description
-                                            <span className={`budgetExpenseDescriptionCharCount ${expenseDescription.length === 250 ? 'maxCount' : ''}`}>
-                                                {expenseDescriptionCharCount} / 250</span></label>
-                                            <textarea className="budgetExpenseDescription" name="description" value={expenseDescription} 
-                                            onChange={(e) => setExpenseDescription(e.target.value)} maxLength={MAX_DESCRIPTION_CHARACTERS}></textarea>
-                                        </div>
-                                        <div className="addBudgetExpenseModalFooter">
-                                            <button type="button" className="addBudgetExpenseModalCloseBtn" 
-                                            onClick={() => toggleAddBudgetExpenseModalOpen(null, 'Budget Type')}>
-                                                Close</button>
+                            {addBudgetExpenseModalId === budget.budget_id && (
+                                <AddBudgetExpense addExpense={addExpense} expenseAmount={expenseAmount} 
+                                redExpenseAmountPlaceHolder={redExpenseAmountPlaceHolder} setExpenseAmount={setExpenseAmount}
+                                expenseDescription={expenseDescription} expenseDescriptionCharCount={expenseDescriptionCharCount}
+                                setExpenseDescription={setExpenseDescription} MAX_DESCRIPTION_CHARACTERS={MAX_DESCRIPTION_CHARACTERS}
+                                toggleAddBudgetExpenseModalOpen={toggleAddBudgetExpenseModalOpen} budgetLoader={budgetLoader}/>
+                            )}
+                            {viewExpensesModalId === budget.budget_id && (
+                                <ViewExpenses expenses={expenses} budget={budget} openExpenseDescriptionModal={openExpenseDescriptionModal} 
+                                toggleViewExpensesModalOpen={toggleViewExpensesModalOpen} expenseDescription={expenseDescription}
+                                closeExpenseDescriptionModal={closeExpenseDescriptionModal}
+                                expenseDescriptionModalOpen={expenseDescriptionModalOpen}/>
+                            )}
+                            {deleteBudgetModalId === budget.budget_id && (
+                                <div className="deleteBudgetModalWrapper">
+                                    <div className="deleteBudgetModalContent">
+                                        <h3 className="deleteBudgetModalTitle">Delete Budget</h3>
+                                        <p className="deleteBudgetModalTxt">Are you sure you want to delete this budget?</p>
+                                        <div className="deleteBudgetModalFooter">
+                                            <button className="deleteBudgetModalBtn close" 
+                                            onClick={() => toggleDeleteBudgetModalOpen(null)}>Close</button>
                                             {budgetLoader ? (
-                                                <button type="button" className="addBudgetExpenseModalAddExpenseBtn"><span class="modalLoader"></span></button>
+                                                <button type="button" className="deleteBudgetModalBtn delete"><span class="modalLoader"></span></button>
                                             ) : (
-                                                <button type="submit" className="addBudgetExpenseModalAddExpenseBtn">Add Expense</button>
+                                                <button className="deleteBudgetModalBtn delete" onClick={() => deleteBudget()}>Delete</button>
                                             )}
                                         </div>
-                                    </form>
+                                    </div>
                                 </div>
                             )}
                         </div>

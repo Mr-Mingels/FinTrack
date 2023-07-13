@@ -1,0 +1,126 @@
+.addBudgetExpenseModalWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(1, 1, 1, 0.5);
+    z-index: 10;
+}
+
+.addBudgetExpenseModalContent {
+    background-color: white;
+    border-radius: 8px;
+    padding: 30px;
+}
+
+.addBudgetExpenseModalTitle {
+    font-size: 22px;
+    font-weight: 600;
+    color: #6d9dc5;
+    margin-bottom: 16px;
+}
+
+.addBudgetExpenseModalMainContent {
+    display: flex;
+    flex-direction: column;
+}
+
+.addBudgetExpenseModalLabel, .budgetExpenseDescriptionLabel {
+    height: 22px;
+    margin-top: 22px;
+    font-size: 14px;
+}
+
+.budgetExpenseDescriptionLabel {
+    display: flex;
+    justify-content: space-between;
+}
+
+.requireTag {
+    color: red;
+}
+
+.addBudgetExpenseModalInput {
+    width: 360px;
+    padding: 10px;
+    outline: none;
+    border: 1px solid black;
+    display: flex;
+    border-radius: 4px;
+    transition: all 0.2s ease-in-out;
+}
+
+.addBudgetExpenseModalInput.field::placeholder {
+    color: red;
+}
+
+.addBudgetExpenseModalInput:focus {
+    border-color: #6d9dc5;
+}
+
+.budgetExpenseDescriptionCharCount {
+    font-size: 13px;
+}
+
+.budgetExpenseDescriptionCharCount.maxCount {
+    color: red;
+}
+
+.budgetExpenseDescription {
+    resize: none;
+    outline: none;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 4px;
+    height: 100px;
+    transition: all 0.2s ease-in-out;
+}
+
+.budgetExpenseDescription:focus {
+    border-color: #6d9dc5;
+}
+
+.budgetExpenseDescription::-webkit-scrollbar {
+    display: none;
+}
+
+.addBudgetExpenseModalFooter {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 28px;
+}
+
+.addBudgetExpenseModalCloseBtn, .addBudgetExpenseModalAddExpenseBtn {
+    background-color: transparent;
+    border: 2px solid #4b7090;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.addBudgetExpenseModalCloseBtn {
+
+}
+
+.addBudgetExpenseModalCloseBtn {
+    color: #4b7090;
+    transition: all 0.2s ease-in-out;
+}
+
+.addBudgetExpenseModalCloseBtn:hover {
+    background-color: #4b7090;
+    color: white;
+}
+
+.addBudgetExpenseModalAddExpenseBtn {
+    min-width: 116px;
+    background-color: #4b7090;
+    color: white;
+}

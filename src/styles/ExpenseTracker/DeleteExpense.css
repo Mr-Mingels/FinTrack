@@ -73,21 +73,66 @@
     display: none;
 }
 
-.renderedExpenseContent.deleteExpenses {
-    padding: 0 20px;
+.deleteModalRenderedItem {
+    font-size: 13px;
+    padding: 12px 15px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
 }
 
-.renderedExpenseType.deleteExpenses {
-    width: 240px;
+.deleteModalRenderedContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 0 0 20px;
+    border-bottom: 1px solid rgba(109, 157, 197, 0.4);
 }
 
-.renderedExpenseAmount.deleteExpenses {
-    width: 196px;
+.deleteModalRenderedContent:hover {
+    background-color: #4b7090;
+    color: white;
 }
 
-.renderedExpenseDate.deleteExpenses {
+.deleteModalRenderedContent.inArr {
+    background-color: #6d9dc5;
+    color: white;
+}
+
+.deleteModalRenderedContent.inArr:hover {
+    background-color: #6d9dc5;
+    color: white;
+}
+
+.deleteModalRenderedItem.type {
+    width: 220px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-right: 1px solid rgba(109, 157, 197, 0.4);
+}
+
+.deleteModalRenderedDescIcon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.deleteModalRenderedItem.amount {
+    width: 160px;
+    border-right: 1px solid rgba(109, 157, 197, 0.4);
+}
+
+.deleteModalRenderedItem.date {
     width: 120px;
-    border: none;
+    border-right: 1px solid rgba(109, 157, 197, 0.4);
+}
+
+.deleteModalRenderedItem.desc {
+    width: 80px;
+    display: flex;
+    justify-content: center;
+    padding: 12px 15px 12px 15px;
 }
 
 .noExpensesTxt {
@@ -148,4 +193,14 @@
 .deleteExpenseBtn:hover {
     background-color: #4b7090;
     color: white;
+}
+
+@media (max-width: 500px) {
+    .deleteExpenseBtn {
+        font-size: calc(12px + (100vw - 500px) / 110);
+        padding-top: calc(8px + (100vw - 500px) / 100);
+        padding-bottom: calc(8px + (100vw - 500px) / 100);
+        padding-right: calc(10px + (100vw - 500px) / 100);
+        padding-left: calc(10px + (100vw - 500px) / 100);
+    }
 }

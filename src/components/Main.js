@@ -8,7 +8,7 @@ import logo from '../assets/logo.png'
 import ExpenseTracker from "./ExpenseTracker/ExpenseTracker";
 import BudgetPlanner from "./BudgetPlanner/BudgetPlanner";
 
-const Main = ({ windowWidth }) => {
+const Main = ({ windowSize }) => {
     const [userInfo, setUserInfo] = useState()
     const [userSettingsModalOpen, setUserSettingsModalOpen] = useState(false)
     const [logOutLoader, setLogOutLoader] = useState(false)
@@ -94,9 +94,9 @@ const Main = ({ windowWidth }) => {
             </nav>
             <section className="mainContentWrapper">
                 <div className="renderedContentWrapper">
-                    <ExpenseTracker windowWidth={windowWidth} getUserInfo={getUserInfo} 
+                    <ExpenseTracker windowWidth={windowSize} getUserInfo={getUserInfo} 
                     userInfo={userInfo}/>
-                    <BudgetPlanner windowWidth={windowWidth} getUserInfo={getUserInfo} 
+                    <BudgetPlanner windowWidth={windowSize} getUserInfo={getUserInfo} 
                     userInfo={userInfo}/>
                 </div>
             </section>

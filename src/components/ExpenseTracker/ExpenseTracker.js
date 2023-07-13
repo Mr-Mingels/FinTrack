@@ -1,7 +1,6 @@
-import { BrowserRouter, Routes, Route, useNavigate, useLocation, Link, Outlet } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleUp, faAngleDown, faCalculator, faMoneyCheckDollar, faMoneyBillTrendUp, faArrowTrendUp, faFileLines } from '@fortawesome/free-solid-svg-icons';
-import React, { lazy, Suspense, useEffect, useState  } from "react";
+import { faAngleUp, faAngleDown, faFileLines } from '@fortawesome/free-solid-svg-icons';
+import React, { useEffect, useState  } from "react";
 import { Chart as Chartjs, BarElement, CategoryScale, LinearScale, Tooltip, Legend, ArcElement} from 'chart.js'
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Bar, Pie } from 'react-chartjs-2';
@@ -14,7 +13,7 @@ Chartjs.register(
     BarElement, CategoryScale, LinearScale, Tooltip, Legend, ArcElement, ChartDataLabels
 )
 
-const ExpenseTracker = ({ userInfo, getUserInfo }) => {
+const ExpenseTracker = ({ userInfo, getUserInfo, windowWidth}) => {
     const [addExpenseModalOpen, setAddExpenseModalOpen] = useState(false)
     const [deleteExpenseModalOpen, setDeleteExpenseModalOpen] = useState(false)
     const [deleteExpensesListOpen, setDeleteExpensesListOpen] = useState(false)
@@ -41,6 +40,18 @@ const ExpenseTracker = ({ userInfo, getUserInfo }) => {
         value: '',
         placeholder: 'Expense Amount'
     });
+
+    useEffect(() => {
+        if (deleteExpenseModalOpen || addExpenseModalOpen || expenseDescriptionModalOpen) {
+            document.body.classList.add('no-scroll');
+        } else {
+            document.body.classList.remove('no-scroll');
+        }
+
+        return () => {
+            document.body.classList.remove('no-scroll');
+        }
+    }, [deleteExpenseModalOpen, addExpenseModalOpen, expenseDescriptionModalOpen]);
 
     useEffect(() => {
         if (userInfo) {
@@ -435,8 +446,10 @@ const ExpenseTracker = ({ userInfo, getUserInfo }) => {
                 <div className="renderedExpensesWrapper">
                     <div className="expenseWrapper"> 
                         <h3 className="expenseTitle">Expenses</h3>
-                        <button className="deleteExpenseBtn" onClick={() => setDeleteExpenseModalOpen(true)}>Delete Expense</button>
-                        <button className="addExpenseBtn" onClick={() => setAddExpenseModalOpen(true)}>Add Expense</button>
+                        <div className='expenseFooter'>
+                            <button className="deleteExpenseBtn" onClick={() => setDeleteExpenseModalOpen(true)}>Delete Expense</button>
+                            <button className="addExpenseBtn" onClick={() => setAddExpenseModalOpen(true)}>Add Expense</button>
+                        </div>
                     </div>  
                 <div>
                     <div className="renderedExpensesHeader">
@@ -508,7 +521,8 @@ const ExpenseTracker = ({ userInfo, getUserInfo }) => {
                 deleteExpenseCountColor={deleteExpenseCountColor} toggleDeleteExpensesMenuOpen={toggleDeleteExpensesMenuOpen}
                 deleteExpensesListOpen={deleteExpensesListOpen} setDeleteExpenseCountColor={setDeleteExpenseCountColor} 
                 setDeleteExpenseArr={setDeleteExpenseArr} setDeleteExpensesListOpen={setDeleteExpensesListOpen}
-                deleteExpenseLoader={deleteExpenseLoader} setDeleteExpenseModalOpen={setDeleteExpenseModalOpen}/>
+                deleteExpenseLoader={deleteExpenseLoader} setDeleteExpenseModalOpen={setDeleteExpenseModalOpen}
+                faFileLines={faFileLines} openExpenseDescriptionModal={openExpenseDescriptionModal}/>
             )}
             </section>
             <section className="expenseChartSection">
