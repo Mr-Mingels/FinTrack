@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route, useNavigate, useLocation, Link } from "react-router-dom";
-import React, { lazy, Suspense, useEffect, useState  } from "react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import React, { useEffect, useState  } from "react";
 import axios from 'axios';
 import '../styles/Authenticate.css'
 import logo from '../assets/logo.png'
@@ -155,7 +155,7 @@ const Authenticate = ({ windowWidth }) => {
                                 className={`authFormPassWordInput ${redPasswordPlaceholder ? 'field' : ''}`} 
                                 onChange={(e) => setPassword({ ...password, value: e.target.value })} value={password.value}/>
                                 {loader ? (
-                                    <button className="authConfirmBtn authLoader"><span class="modalLoader"></span></button>
+                                    <button className="authConfirmBtn authLoader"><span className="modalLoader"></span></button>
                                 ) : (
                                     <button type="submit" className="authConfirmBtn">{authConfig ? 'Sign Up' : 'Log In'}</button>
                                 )}  

@@ -91,6 +91,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 28px;
 }
 
 .userSettingsLogOutBtn.logOutLoader {
@@ -120,47 +121,6 @@
     max-height: 760px;
 }
 
-.mainSideBarWrapper {
-    min-width: 220px;
-    background-color: #4b7090;
-    border-top-right-radius: 20px;
-}
-
-.mainSideBarContent {
-    padding: 30px 20px;
-}
-
-.sideBarListWrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    list-style: none;
-    font-size: 15px;
-    color: white;
-    gap: 12px;
-}
-
-.sideBarListItem {
-    padding: 10px;
-    cursor: pointer;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    border-radius: 4px;
-    text-decoration: none;
-    color: white;
-}
-
-.sideBarListItem:hover {
-    background-color: white;
-    color: #4b7090;
-}
-
-.sideBarListItemIcon {
-    min-width: 16.88px;
-}
-
 .renderedContentWrapper {
     width: 100%;
 }
@@ -183,12 +143,26 @@
     }
 }
 
-@media (max-width: 660px) {
+@media (max-width: 500px) {
     .mainContentWrapper {
         height: fit-content;
         max-height: 1356px;
     }
-}
-
-@media (max-width: 500px) {
+    .navAppTitle {
+        font-size: 22px;
+    }
+    .navLogoImg {
+        width: 40px;
+        height: 30px;
+    }
+    .navUserSettingBtn {
+        font-size: 12px;
+    }
+    .navUserSettingsModalWrapper {
+        padding: 3px;
+    }
+    .userSettingsLogOutBtn { 
+        font-size: 12px;
+        min-height: 27.2px;
+    }
 }

@@ -1,7 +1,7 @@
-import { BrowserRouter, Routes, Route, useNavigate, useLocation, Link, Outlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleUp, faAngleDown, faCalculator, faMoneyCheckDollar, faMoneyBillTrendUp, faArrowTrendUp } from '@fortawesome/free-solid-svg-icons';
-import React, { lazy, Suspense, useEffect, useState  } from "react";
+import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import React, { useEffect, useState  } from "react";
 import axios from 'axios';
 import '../styles/Main.css'
 import logo from '../assets/logo.png'
@@ -59,7 +59,14 @@ const Main = ({ windowSize }) => {
       }
 
     if (!userInfo) {
-        return <div className="loaderWrapper"><span class="loader"></span></div>
+        return (
+            <div className="loaderFullPageWrapper">
+                <div className="loaderWrapper">
+                    <img src={logo} className="loaderLogoImg" onMouseDown={(e) => e.preventDefault()}/>
+                    <span class="loader"></span>
+                </div>
+            </div>
+        )
     }
 
     return (

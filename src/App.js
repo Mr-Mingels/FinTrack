@@ -1,7 +1,7 @@
 import './App.css'
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import React, { lazy, Suspense, useEffect, useState  } from "react";
-import ExpenseTracker from './components/ExpenseTracker/ExpenseTracker.js'
+import logo from './assets/logo.png'
 
 const Authenticate = lazy(() => import('./components/Authenticate'));
 const Main = lazy(() => import('./components/Main'))
@@ -33,7 +33,14 @@ const App = () => {
   return (
     <div className="App">
       <BrowserRouter>
-        <Suspense fallback={<div className="loaderWrapper"><span className="loader"></span></div>}>
+        <Suspense fallback={
+            <div className="loaderFullPageWrapper">
+                <div className="loaderWrapper">
+                    <img src={logo} className="loaderLogoImg" onMouseDown={(e) => e.preventDefault()}/>
+                    <span class="loader"></span>
+                </div>
+            </div>
+        }>
             <Routes>
               <Route path="/sign-up" element={<Authenticate windowWidth={windowWidth}/>} />
               <Route path="/log-in" element={<Authenticate windowWidth={windowWidth}/>} />

@@ -15,8 +15,13 @@
 }
 
 .authAppTitle {
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 24px;
     display: flex;
     align-items: center;
+    color: #6d9dc5;
     gap: 12px;
 }
 
@@ -30,12 +35,14 @@
     flex-direction: column;
     padding: 40px;
     border-radius: 12px;
-    background-color: white;
+    background-color: #6d9dc5;
     align-items: center;
     gap: 30px;
 }
 
 .authCreateAccountTitle {
+    color: white;
+    font-weight: 600;
 }
 
 .authFormWrapper {
@@ -60,6 +67,7 @@
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none;
+    color: white;
 }
 
 .authRequireTag {
@@ -73,8 +81,8 @@
 .authFormEmailInput, .authFormUserNameInput, .authFormPassWordInput {
     outline: none;
     padding: 12px 15px;
-    border: 1px solid gray;
-    border-radius: 20px;
+    border: 1px solid white;
+    border-radius: 4px;
     transition: all 0.2s ease-in-out;
 }
 
@@ -93,7 +101,7 @@
     border-radius: 30px;
     padding: 16px;
     margin-top: 22px;
-    background-color: #222222;
+    background-color: #00406b;
     height: 48px;
     cursor: pointer;
     -webkit-user-select: none; /* Safari */
@@ -111,13 +119,20 @@
 .authFormQuestion {
     margin-top: 12px;
     font-weight: 400;
+    color: white;
 }
 
 .authFormRedirectLink {
-    color: rgb(0, 103, 103);
+    color: rgb(0, 40, 40);
     text-decoration: none;
     -webkit-user-select: none; /* Safari */
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none;
+}
+/* font-size: calc(12px + (100vw - 500px) / 110); */
+@media (max-width: 500px) {
+    .authFormModalWrapper {
+        padding: calc(40px + (100vw - 500px) / 110);
+    }
 }

@@ -51,6 +51,7 @@
     border-radius: 4px;
     width: 600px;
     position: relative;
+    cursor: pointer;
 }
 
 .deleteExpensesAngleUpIcon, .deleteExpensesAngleDownIcon {
@@ -195,6 +196,24 @@
     color: white;
 }
 
+@media (max-width: 700px) {
+    .deleteExpensesBtn {
+        width: calc(600px + (100vw - 700px) / 1);
+    }
+    .deleteModalRenderedContent {
+        padding: 0;
+    }
+    .deleteModalRenderedItem {
+        font-size: 10px;
+        padding: 10px 12px;
+    }
+    .deleteModalRenderedDescIcon {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+}
+
 @media (max-width: 500px) {
     .deleteExpenseBtn {
         font-size: calc(12px + (100vw - 500px) / 110);
@@ -202,5 +221,50 @@
         padding-bottom: calc(8px + (100vw - 500px) / 100);
         padding-right: calc(10px + (100vw - 500px) / 100);
         padding-left: calc(10px + (100vw - 500px) / 100);
+    }
+    .deleteExpenseModalContent {
+        padding: calc(30px + (100vw - 500px) / 12.22222);
+    }
+    .deleteExpenseModalTitle {
+        font-size: calc(20px + (100vw - 500px) / 50);
+    }
+    .deleteExpensesBtnLabel {
+        font-size: calc(14px + (100vw - 500px) / 110);
+        height: fit-content;
+        flex-direction: column;
+        margin-bottom: 4px;
+    }
+    .deleteExpensesBtn {
+        width: calc(400px + (100vw - 500px) / 1.4);
+        font-size: calc(13px + (100vw - 500px) / 110);
+    }
+    .deleteModalRenderedContent {
+        padding: 0;
+    }
+    .deleteModalRenderedContent:hover {
+        background-color: unset;
+        color: unset;
+    }
+    .deleteModalRenderedItem {
+        font-size: calc(9px + (100vw - 500px) / 200) !important;
+        padding-right: calc(15px + (100vw - 500px) / 16) !important;
+        padding-left: calc(15px + (100vw - 500px) / 16) !important;
+        padding-top: calc(12px + (100vw - 500px) / 16) !important;
+        padding-bottom: calc(12px + (100vw - 500px) / 16) !important;
+        min-height: calc(44px + (100vw - 500px) / 16) !important;
+    }
+    .deleteModalRenderedDescIcon {
+        width: calc(20px + (100vw - 500px) / 30);
+        height: calc(20px + (100vw - 500px) / 30);
+    }
+    .deleteExpensesDeleteBtn, .deleteExpensesCloseBtn {
+        font-size: calc(12px + (100vw - 500px) / 110);
+        padding-top: calc(8px + (100vw - 500px) / 100);
+        padding-bottom: calc(8px + (100vw - 500px) / 100);
+        padding-right: calc(10px + (100vw - 500px) / 100);
+        padding-left: calc(10px + (100vw - 500px) / 100);
+    }
+    .deleteExpensesDeleteBtn {
+        min-width: calc(72px + (100vw - 500px) / 16);
     }
 }

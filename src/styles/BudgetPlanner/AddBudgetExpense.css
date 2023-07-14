@@ -124,3 +124,40 @@
     background-color: #4b7090;
     color: white;
 }
+
+@media (max-width: 500px) {
+    .addBudgetExpenseModalContent {
+        padding: calc(30px + (100vw - 500px) / 12.22222);
+    }
+    .addBudgetExpenseModalTitle {
+        font-size: calc(20px + (100vw - 500px) / 50);
+        margin-bottom: calc(22px + (100vw - 500px) / 25);
+    }
+    .addBudgetExpenseModalLabel {
+        margin: 0px;
+    }
+    .addBudgetExpenseModalLabel, .budgetExpenseDescriptionLabel {
+        font-size: calc(14px + (100vw - 500px) / 110);
+        height: calc(24px + (100vw - 500px) / 110);
+    }
+    .addBudgetExpenseModalInput {
+        font-size: calc(13px + (100vw - 500px) / 110);
+        width: calc(360px + (100vw - 500px) / 2);
+    }
+    .budgetExpenseDescriptionCharCount {
+        font-size: calc(12px + (100vw - 500px) / 110);
+    }
+    .budgetExpenseDescription {
+        font-size: calc(12px + (100vw - 500px) / 110);
+    }
+    .addBudgetExpenseModalAddExpenseBtn {
+        min-width: calc(102px + (100vw - 500px) / 16);
+    }
+    .addBudgetExpenseModalAddExpenseBtn, .addBudgetExpenseModalCloseBtn {
+        font-size: calc(12px + (100vw - 500px) / 110);
+        padding-top: calc(8px + (100vw - 500px) / 100);
+        padding-bottom: calc(8px + (100vw - 500px) / 100);
+        padding-right: calc(10px + (100vw - 500px) / 100);
+        padding-left: calc(10px + (100vw - 500px) / 100);
+    }
+}

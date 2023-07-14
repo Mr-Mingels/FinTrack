@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleUp, faAngleDown } from '@fortawesome/free-solid-svg-icons';
-import React, { lazy, Suspense, useEffect, useState  } from "react";
 import '../../styles/BudgetPlanner/AddBudget.css'
 
 const AddBudget = ({ toggleBudgetTypeMenuOpen, budgetType, budgetTypeMenuOpen, setBudgetType, budgetTimeFrameMenuOpen, 

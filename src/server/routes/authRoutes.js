@@ -48,6 +48,16 @@ router.post('/signin', async (req, res, next) => {
     const email = req.body.email.toUpperCase();
     const userByEmail = await db.select('*').from('users').where('email', email)
     const userByUsername = await db.select('*').from('users').where('username', username)
+    
+    console.log('userbyemail:', userByEmail, "userbyusername:", userByUsername)
+
+    if (userByEmail.length === 0 && userByUsername.length === 0) {
+        return res.status(400).send({ message: "Email and Username are incorrect" });
+    } else if (userByEmail.length === 0) {
+        return res.status(400).send({ message: 'Email is incorrect' });
+    } else if (userByUsername.length === 0) {
+        return res.status(400).send({ message: 'Username is incorrect' });
+    }
 
     if (!req.body.email || !req.body.username || !password) {
         return res.status(400).send({ message: "All fields are required" });

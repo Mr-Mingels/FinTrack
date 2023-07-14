@@ -41,6 +41,7 @@
     background-color: transparent;
     position: relative;
     transition: all 0.2s ease-in-out;
+    cursor: pointer;
 }
 
 .addExpenseTypeModalBtn.open {
@@ -186,6 +187,36 @@
 
 @media (max-width: 500px) {
     .addExpenseBtn {
+        font-size: calc(12px + (100vw - 500px) / 110);
+        padding-top: calc(8px + (100vw - 500px) / 100);
+        padding-bottom: calc(8px + (100vw - 500px) / 100);
+        padding-right: calc(10px + (100vw - 500px) / 100);
+        padding-left: calc(10px + (100vw - 500px) / 100);
+    }
+    .addExpenseModalContent {
+        padding: calc(30px + (100vw - 500px) / 12.22222);
+    }
+    .addExpenseModalTitle {
+        font-size: calc(20px + (100vw - 500px) / 50);
+    }
+    .addExpenseModalLabel, .expenseDescriptionLabel {
+        font-size: calc(14px + (100vw - 500px) / 110);
+        height: calc(22px + (100vw - 500px) / 110);
+    }
+    .addExpenseModalInput, .addExpenseTypeModalBtn   {
+        font-size: calc(13px + (100vw - 500px) / 110);
+        width: calc(360px + (100vw - 500px) / 2);
+    }
+    .expenseDescriptionCharCount  {
+        font-size: calc(12px + (100vw - 500px) / 110);
+    }
+    .expenseDescription {
+        font-size: calc(12px + (100vw - 500px) / 110);
+    }
+    .addExpenseModalAddExpenseBtn {
+        min-width: calc(116px + (100vw - 500px) / 10);
+    }
+    .addExpenseModalAddExpenseBtn, .addExpenseModalCloseBtn {
         font-size: calc(12px + (100vw - 500px) / 110);
         padding-top: calc(8px + (100vw - 500px) / 100);
         padding-bottom: calc(8px + (100vw - 500px) / 100);

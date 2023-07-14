@@ -1,13 +1,13 @@
-import { BrowserRouter, Routes, Route, useNavigate, useLocation, Link, Outlet } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleUp, faAngleDown, faCalculator, faMoneyCheckDollar, faMoneyBillTrendUp, faFileLines, faTrash } from '@fortawesome/free-solid-svg-icons';
-import React, { lazy, Suspense, useEffect, useState  } from "react";
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import React, { useEffect, useState  } from "react";
 import axios from 'axios';
 import moment from 'moment';
 import '../../styles/BudgetPlanner/BudgetPlanner.css'
 import AddBudget from "./AddBudget";
 import AddBudgetExpense from "./AddBudgetExpense";
 import ViewExpenses from "./ViewExpenses";
+import logo from '../../assets/logo.png'
 
 const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
     const [addBudgetModalOpen, setAddBudgetModalOpen] = useState(false)
@@ -200,7 +200,7 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
             const response = await axios.post('http://localhost:5000/add-expense', expense, { withCredentials: true })
             console.log(response)
             if (response.status === 200) {
-                getUserInfo()
+                await getUserInfo()
                 toggleAddBudgetExpenseModalOpen(null, 'Budget Type')
             }
             setBudgetLoader(false)
@@ -233,7 +233,7 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
             });
             console.log(response)
             if (response.status === 200) {
-                getUserInfo()
+                await getUserInfo()
                 toggleDeleteBudgetModalOpen(null)
             }
         } catch (err) {
@@ -256,7 +256,14 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
     }
 
     if (!budgets) {
-        return <div className="loaderWrapper"><span class="loader"></span></div>
+        return (
+            <div className="loaderFullPageWrapper">
+                <div className="loaderWrapper">
+                    <img src={logo} className="loaderLogoImg" onMouseDown={(e) => e.preventDefault()}/>
+                    <span class="loader"></span>
+                </div>
+            </div>
+        )
     }
 
     return (
@@ -279,7 +286,7 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
                     )}
                 </div>
                 <div className="renderedBudgetsWrapper">
-                {budgets.map((budget) => {
+                {budgets.sort((a, b) => a.budget_type.localeCompare(b.budget_type)).map((budget) => {
                     // Filter expenses by type.
                     let budgetExpenses = expenses.filter(expense => expense.expense_type === budget.budget_type);
 

@@ -8,6 +8,7 @@ import axios from 'axios';
 import '../../styles/ExpenseTracker/ExpenseTracker.css'
 import AddExpense from "./AddExpense";
 import DeleteExpense from "./DeleteExpense";
+import logo from '../../assets/logo.png'
 
 Chartjs.register(
     BarElement, CategoryScale, LinearScale, Tooltip, Legend, ArcElement, ChartDataLabels
@@ -101,7 +102,7 @@ const ExpenseTracker = ({ userInfo, getUserInfo, windowWidth}) => {
             const response = await axios.post('http://localhost:5000/add-expense', expense, { withCredentials: true })
             console.log(response)
             if (response.status === 200) {
-                getUserInfo()
+                await getUserInfo()
                 closeAddExpenseModal()
             }
             setAddExpenseLoader(false)
@@ -392,7 +393,7 @@ const ExpenseTracker = ({ userInfo, getUserInfo, windowWidth}) => {
             });
             console.log(response)
             if (response.status === 200) {
-                getUserInfo()
+                await getUserInfo()
                 setDeleteExpenseModalOpen(false)
                 setDeleteExpensesListOpen(false)
                 setDeleteExpenseArr([])
@@ -411,7 +412,14 @@ const ExpenseTracker = ({ userInfo, getUserInfo, windowWidth}) => {
     },[deleteExpensesArr])
     
     if (!pieChartData || !yourBarChartData || !yourBarChartOptions) {
-        return <div className="loaderWrapper"><span class="loader"></span></div>
+        return (
+            <div className="loaderFullPageWrapper">
+                <div className="loaderWrapper">
+                    <img src={logo} className="loaderLogoImg" onMouseDown={(e) => e.preventDefault()}/>
+                    <span class="loader"></span>
+                </div>
+            </div>
+        )
     }
 
     return (
