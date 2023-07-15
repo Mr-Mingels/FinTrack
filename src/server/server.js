@@ -12,7 +12,7 @@ const app = express()
 
 const PORT = process.env.PORT || 5000;
 
-app.use(cors({ origin: ["http://localhost:3000", "https://app-api-chatter-sphere.onrender.com", "http://localhost:5000", "https://eu-chatter-sphere.onrender.com"], credentials: true }));
+app.use(cors({ origin: ["http://localhost:3000", "https://fin-track.onrender.com", "http://localhost:5000"], credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
