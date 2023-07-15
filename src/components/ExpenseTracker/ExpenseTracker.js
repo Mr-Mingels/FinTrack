@@ -100,7 +100,6 @@ const ExpenseTracker = ({ userInfo, getUserInfo, windowWidth}) => {
         }
         try {
             const response = await axios.post('/add-expense', expense, { withCredentials: true })
-            console.log(response)
             if (response.status === 200) {
                 await getUserInfo()
                 closeAddExpenseModal()
@@ -209,7 +208,6 @@ const ExpenseTracker = ({ userInfo, getUserInfo, windowWidth}) => {
                 }
             });
         }
-        console.log(dataArr)
         const formattedSum = Number(sum).toLocaleString('en-US');
         setExpenseSum(formattedSum)
         setDataArr(dataArr)
@@ -265,7 +263,6 @@ const ExpenseTracker = ({ userInfo, getUserInfo, windowWidth}) => {
     };
 
     const getPieChartData = (timePeriod) => {
-        console.log(timePeriod)
         let expensesByType = {};
         const now = new Date();
     
@@ -275,7 +272,6 @@ const ExpenseTracker = ({ userInfo, getUserInfo, windowWidth}) => {
             let includeExpense = false;
             if (timePeriod === 'today') {
                 includeExpense = expenseDate.toDateString() === now.toDateString();
-                console.log('include Expense:', includeExpense)
             } else if (timePeriod === 'week') {
                 const daysDiff = Math.floor((now - expenseDate) / (1000 * 60 * 60 * 24));
                 includeExpense = daysDiff < 7;
@@ -292,11 +288,8 @@ const ExpenseTracker = ({ userInfo, getUserInfo, windowWidth}) => {
                 expensesByType[expense.expense_type] += Number(expense.expense_amount);
             }
         });
-        console.log(expensesByType)
         const dataArr = Object.values(expensesByType); // get the amounts
         const labelsArr = Object.keys(expensesByType); // get the labels
-        console.log('labels:', labelsArr, "data:", dataArr)
-        console.log('data:', dataArr, 'lables:', labelsArr)
         setPieChartData({
             labels: labelsArr,
             datasets: [
@@ -364,9 +357,7 @@ const ExpenseTracker = ({ userInfo, getUserInfo, windowWidth}) => {
     }
 
     const addExpenseToDeletedExpensesArr = (expenseId) => {
-        console.log('overall exe')
         setDeleteExpenseArr(prevArr => {
-            console.log('prevArr:', prevArr, 'expenseId:', expenseId)
             const foundId = prevArr.find(id => id === expenseId);
             if (foundId) {
                 return prevArr.filter(id => id !== foundId);
@@ -374,16 +365,16 @@ const ExpenseTracker = ({ userInfo, getUserInfo, windowWidth}) => {
                 return [...prevArr, expenseId];
             }
         });
-        console.log(deleteExpensesArr)
     }
 
     const deleteExpenses = async (event) => {
         event.preventDefault()
+        setDeleteExpenseLoader(true)
         if (deleteExpensesArr.length === 0) {
             setDeleteExpenseCountColor(true)
+            setDeleteExpenseLoader(false)
             return
         }
-        setDeleteExpenseLoader(true)
         try {
             const response = await axios({
                 method: 'delete',
@@ -391,7 +382,6 @@ const ExpenseTracker = ({ userInfo, getUserInfo, windowWidth}) => {
                 data: deleteExpensesArr,
                 withCredentials: true
             });
-            console.log(response)
             if (response.status === 200) {
                 await getUserInfo()
                 setDeleteExpenseModalOpen(false)

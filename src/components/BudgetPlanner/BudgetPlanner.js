@@ -125,7 +125,6 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
 
         try {   
             const response = await axios.post('/add-budget', budget, { withCredentials: true })
-            console.log(response)
             if (response.status === 200) {
                 await getUserInfo()
                 setAddBudgetModalOpen(false)
@@ -198,7 +197,6 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
         }
         try {
             const response = await axios.post('/add-expense', expense, { withCredentials: true })
-            console.log(response)
             if (response.status === 200) {
                 await getUserInfo()
                 toggleAddBudgetExpenseModalOpen(null, 'Budget Type')
@@ -223,7 +221,7 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
     };
 
     const deleteBudget = async () => {
-        console.log(deleteBudgetModalId)
+        setBudgetLoader(true)
         try {
             const response = await axios({
                 method: 'delete',
@@ -231,13 +229,14 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
                 data: [deleteBudgetModalId],
                 withCredentials: true
             });
-            console.log(response)
             if (response.status === 200) {
                 await getUserInfo()
                 toggleDeleteBudgetModalOpen(null)
             }
+            setBudgetLoader(false)
         } catch (err) {
             console.log(err)
+            setBudgetLoader(false)
         }
     }
 

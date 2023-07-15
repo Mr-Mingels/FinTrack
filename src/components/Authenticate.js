@@ -27,6 +27,9 @@ const Authenticate = ({ windowWidth }) => {
     const navigate = useNavigate()
 
     useEffect(() => {
+        setRedPasswordPlaceholder(false)
+        setRedUserNamePlaceHolder(false)
+        setRedEmailPlaceHolder(false)
         setUserName({ ...userName, value: '', placeholder: 'Enter your username' })
         setEmail({ ...email, value: '', placeholder: 'Enter your email' })
         setPassword({ ...password, value: '', placeholder: 'Enter your password' })

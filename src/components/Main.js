@@ -23,11 +23,9 @@ const Main = ({ windowSize }) => {
             navigate('/sign-up');
           } else {
             const userData = await response.json()
-            console.log("user data:", userData)
             setUserInfo(userData)
           }
         } catch (error) {
-          console.log(error.message)
           console.log(error)
         }
     };
