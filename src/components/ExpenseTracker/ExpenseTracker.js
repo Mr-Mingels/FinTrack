@@ -99,7 +99,7 @@ const ExpenseTracker = ({ userInfo, getUserInfo, windowWidth}) => {
             expenseDescription: expenseDescription
         }
         try {
-            const response = await axios.post('http://localhost:5000/add-expense', expense, { withCredentials: true })
+            const response = await axios.post('/add-expense', expense, { withCredentials: true })
             console.log(response)
             if (response.status === 200) {
                 await getUserInfo()
@@ -387,7 +387,7 @@ const ExpenseTracker = ({ userInfo, getUserInfo, windowWidth}) => {
         try {
             const response = await axios({
                 method: 'delete',
-                url: 'http://localhost:5000/delete-expense',
+                url: '/delete-expense',
                 data: deleteExpensesArr,
                 withCredentials: true
             });
@@ -416,7 +416,7 @@ const ExpenseTracker = ({ userInfo, getUserInfo, windowWidth}) => {
             <div className="loaderFullPageWrapper">
                 <div className="loaderWrapper">
                     <img src={logo} className="loaderLogoImg" onMouseDown={(e) => e.preventDefault()}/>
-                    <span class="loader"></span>
+                    <span className="loader"></span>
                 </div>
             </div>
         )

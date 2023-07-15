@@ -27,6 +27,12 @@ const Authenticate = ({ windowWidth }) => {
     const navigate = useNavigate()
 
     useEffect(() => {
+        setUserName({ ...userName, value: '', placeholder: 'Enter your username' })
+        setEmail({ ...email, value: '', placeholder: 'Enter your email' })
+        setPassword({ ...password, value: '', placeholder: 'Enter your password' })
+    },[location.pathname])
+
+    useEffect(() => {
         if (location.pathname === '/sign-up') {
             setAuthConfig(true)
         } else {
@@ -63,7 +69,7 @@ const Authenticate = ({ windowWidth }) => {
         try {
             const path = authConfig ? 'register' : 'signin';
 
-            const response = await axios.post(`http://localhost:5000/${path}`, user, { withCredentials: true });
+            const response = await axios.post(`/${path}`, user, { withCredentials: true });
             if (authConfig && response.status === 200) {
                 navigate('/log-in')
                 setEmail({ ...email, value: ''})
@@ -134,12 +140,29 @@ const Authenticate = ({ windowWidth }) => {
         }
       }, [password.value])
 
+      const demoAccountLogIn = async () => {
+        const user = {
+            email: 'DEMOACCOUNT@GMAIL.COM',
+            username: 'DEMOACCOUNT',
+            password: '1234'
+        }
+        try {
+            const response = await axios.post(`/signin`, user, { withCredentials: true });
+            if (response.status === 200) {
+                navigate('/')
+            }
+        } catch (err) {
+            console.log(err)    
+        }
+      }
+
     return (
         <section className="authWrapper">
             <div className="authContentWrapper">
                 <h2 className="authAppTitle"><img className="authLogoImg" src={logo} />finTrack</h2>
                     <div className="authFormModalWrapper">
                         <h1 className="authCreateAccountTitle">{authConfig ? 'Create your account' : 'Log into your account'}</h1>
+                        <span className="demoAccountTxt" onClick={() => demoAccountLogIn()}>Use Demo Account</span>
                         <div className="authFormWrapper">
                             <form method="POST" className="authForm" onSubmit={handleFormSubmit}>
                                 <label className="authLabel">Email<span className="authRequireTag">*</span></label>

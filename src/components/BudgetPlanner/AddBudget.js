@@ -90,7 +90,7 @@ const AddBudget = ({ toggleBudgetTypeMenuOpen, budgetType, budgetTypeMenuOpen, s
                     <button type="button" className="addBudgetModalBtn close" 
                     onClick={() => toggleAddBudgetModalOpen()}>Close</button>
                     {budgetLoader ? (
-                        <button type="button" className="addBudgetModalBtn add"><span class="modalLoader"></span></button>
+                        <button type="button" className="addBudgetModalBtn add"><span className="modalLoader"></span></button>
                     ) : (
                         <button type="submit" className="addBudgetModalBtn add">Add Budget</button>
                     )}

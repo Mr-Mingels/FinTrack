@@ -124,7 +124,7 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
         }
 
         try {   
-            const response = await axios.post('http://localhost:5000/add-budget', budget, { withCredentials: true })
+            const response = await axios.post('/add-budget', budget, { withCredentials: true })
             console.log(response)
             if (response.status === 200) {
                 await getUserInfo()
@@ -197,7 +197,7 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
             expenseDescription: expenseDescription
         }
         try {
-            const response = await axios.post('http://localhost:5000/add-expense', expense, { withCredentials: true })
+            const response = await axios.post('/add-expense', expense, { withCredentials: true })
             console.log(response)
             if (response.status === 200) {
                 await getUserInfo()
@@ -227,7 +227,7 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
         try {
             const response = await axios({
                 method: 'delete',
-                url: 'http://localhost:5000/delete-budget',
+                url: '/delete-budget',
                 data: [deleteBudgetModalId],
                 withCredentials: true
             });
@@ -260,7 +260,7 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
             <div className="loaderFullPageWrapper">
                 <div className="loaderWrapper">
                     <img src={logo} className="loaderLogoImg" onMouseDown={(e) => e.preventDefault()}/>
-                    <span class="loader"></span>
+                    <span className="loader"></span>
                 </div>
             </div>
         )
@@ -357,7 +357,7 @@ const BudgetPlanner = ({ userInfo, getUserInfo, windowWidth }) => {
                                             <button className="deleteBudgetModalBtn close" 
                                             onClick={() => toggleDeleteBudgetModalOpen(null)}>Close</button>
                                             {budgetLoader ? (
-                                                <button type="button" className="deleteBudgetModalBtn delete"><span class="modalLoader"></span></button>
+                                                <button type="button" className="deleteBudgetModalBtn delete"><span className="modalLoader"></span></button>
                                             ) : (
                                                 <button className="deleteBudgetModalBtn delete" onClick={() => deleteBudget()}>Delete</button>
                                             )}

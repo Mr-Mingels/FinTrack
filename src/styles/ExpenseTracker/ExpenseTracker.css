@@ -338,8 +338,6 @@
     visibility: hidden;
 }
 
-/* font-size: calc(12px + (100vw - 1536px) / 160); */
-
 @media screen and (min-width: 1536.1px) and (max-width: 100vw) {
 }
 

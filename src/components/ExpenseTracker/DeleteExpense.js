@@ -75,7 +75,7 @@ const DeleteExpense = ({ expenses, deleteExpensesArr, addExpenseToDeletedExpense
                     <button className="deleteExpensesCloseBtn" onClick={() => {setDeleteExpenseModalOpen(false); 
                         setDeleteExpenseArr([]); setDeleteExpenseCountColor(false); setDeleteExpensesListOpen(false)}}>Close</button>
                         {deleteExpenseLoader ? (
-                            <button type="button" className="deleteExpensesDeleteBtn"><span class="modalLoader"></span></button>
+                            <button type="button" className="deleteExpensesDeleteBtn"><span className="modalLoader"></span></button>
                         ) : (
                             <button type='submit' className="deleteExpensesDeleteBtn">Delete</button>                            
                         )}

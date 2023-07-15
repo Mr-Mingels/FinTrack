@@ -77,7 +77,7 @@ const AddExpense = ({ addExpense, expenseTypeMenuOpen, expenseType, handleExpens
                             onClick={() => closeAddExpenseModal()}>
                                 Close</button>
                             {addExpenseLoader ? (
-                                <button type="button" className="addExpenseModalAddExpenseBtn"><span class="modalLoader"></span></button>
+                                <button type="button" className="addExpenseModalAddExpenseBtn"><span className="modalLoader"></span></button>
                             ) : (
                                 <button type="submit" className="addExpenseModalAddExpenseBtn">Add Expense</button>
                             )}

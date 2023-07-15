@@ -17,7 +17,7 @@ const Main = ({ windowSize }) => {
     
     const getUserInfo = async () => {
         try {
-          const response = await fetch('http://localhost:5000/user-info', { credentials: 'include' });
+          const response = await fetch('/user-info', { credentials: 'include' });
           // check for user authentication
           if (response.status === 401) {
             navigate('/sign-up');
@@ -47,7 +47,7 @@ const Main = ({ windowSize }) => {
     const logOut = async () => {
         setLogOutLoader(true)
         try {
-          const response = await axios.get('http://localhost:5000/log-out', { withCredentials: true });
+          const response = await axios.get('/log-out', { withCredentials: true });
           if (response.status === 200) {
             navigate('/log-in')
           }
@@ -63,7 +63,7 @@ const Main = ({ windowSize }) => {
             <div className="loaderFullPageWrapper">
                 <div className="loaderWrapper">
                     <img src={logo} className="loaderLogoImg" onMouseDown={(e) => e.preventDefault()}/>
-                    <span class="loader"></span>
+                    <span className="loader"></span>
                 </div>
             </div>
         )
@@ -79,7 +79,8 @@ const Main = ({ windowSize }) => {
                     </div>
                     <div className="navBarUserSettingWrapper">
                         <button onClick={() => handleOpenUserSettings()} className="navUserSettingBtn">
-                            {userInfo.username.charAt(0).toUpperCase() + userInfo.username.slice(1).toLowerCase()}
+                            <span className="navUserName">
+                                {userInfo.username.charAt(0).toUpperCase() + userInfo.username.slice(1).toLowerCase()}</span>
                         {userSettingsModalOpen ? (
                             <FontAwesomeIcon className="navAngleUpIcon" icon={faAngleUp} />
                         ) : (
@@ -89,7 +90,7 @@ const Main = ({ windowSize }) => {
                             <div className="navUserSettingsModalWrapper">
                                 <div className="navUserSettingsModalContent">
                                     {logOutLoader ? (
-                                        <button className="userSettingsLogOutBtn logOutLoader"><span class="modalLoader"></span></button>
+                                        <button className="userSettingsLogOutBtn logOutLoader"><span className="modalLoader"></span></button>
                                     ) : (
                                         <button onClick={() => logOut()} className="userSettingsLogOutBtn">Log Out</button>
                                     )}

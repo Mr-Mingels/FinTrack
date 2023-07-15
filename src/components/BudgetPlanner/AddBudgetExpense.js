@@ -28,7 +28,7 @@ const AddBudgetExpense = ({ addExpense, expenseAmount, redExpenseAmountPlaceHold
                     onClick={() => toggleAddBudgetExpenseModalOpen(null, 'Budget Type')}>
                         Close</button>
                     {budgetLoader ? (
-                        <button type="button" className="addBudgetExpenseModalAddExpenseBtn"><span class="modalLoader"></span></button>
+                        <button type="button" className="addBudgetExpenseModalAddExpenseBtn"><span className="modalLoader"></span></button>
                     ) : (
                         <button type="submit" className="addBudgetExpenseModalAddExpenseBtn">Add Expense</button>
                     )}

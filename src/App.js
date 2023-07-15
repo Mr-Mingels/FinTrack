@@ -37,7 +37,7 @@ const App = () => {
             <div className="loaderFullPageWrapper">
                 <div className="loaderWrapper">
                     <img src={logo} className="loaderLogoImg" onMouseDown={(e) => e.preventDefault()}/>
-                    <span class="loader"></span>
+                    <span className="loader"></span>
                 </div>
             </div>
         }>

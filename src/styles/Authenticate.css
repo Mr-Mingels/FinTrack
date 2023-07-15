@@ -37,12 +37,21 @@
     border-radius: 12px;
     background-color: #6d9dc5;
     align-items: center;
-    gap: 30px;
 }
 
 .authCreateAccountTitle {
     color: white;
     font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.demoAccountTxt {
+    color: rgb(0, 40, 40);
+    cursor: pointer;
+    font-size: 13.3333px;
+    text-align: center;
+    margin-bottom: 8px;
+    text-decoration: underline;
 }
 
 .authFormWrapper {
@@ -130,9 +139,42 @@
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none;
 }
-/* font-size: calc(12px + (100vw - 500px) / 110); */
+
 @media (max-width: 500px) {
+    .authAppTitle {
+        padding: 16px;
+        font-size: calc(22px + (100vw - 500px) / 110);
+    }
     .authFormModalWrapper {
-        padding: calc(40px + (100vw - 500px) / 110);
+        padding: calc(40px + (100vw - 500px) / 10);
+    }
+    .authCreateAccountTitle {
+        font-size: calc(24px + (100vw - 500px) / 80);
+        margin-bottom: calc(30px + (100vw - 500px) / 20);
+    }
+    .demoAccountTxt {
+        font-size: calc(13.3333px + (100vw - 500px) / 110);
+    }
+    .authFormWrapper {
+        width: calc(350px + (100vw - 500px) / 1.6);
+    }
+    .authLabel {
+        font-size: calc(16px + (100vw - 500px) / 110);
+        height: calc(30px + (100vw - 500px) / 110);;
+    }
+    .authFormEmailInput, .authFormUserNameInput, .authFormPassWordInput {
+        font-size: calc(13.3333px + (100vw - 500px) / 110);
+        padding-top: calc(12px + (100vw - 500px) / 100);
+        padding-bottom: calc(12px + (100vw - 500px) / 100);
+        padding-right: calc(15px + (100vw - 500px) / 100);
+        padding-left: calc(15px + (100vw - 500px) / 100);
+    }
+    .authConfirmBtn {
+        font-size: calc(13.3333px + (100vw - 500px) / 110);
+        padding: calc(16px + (100vw - 500px) / 100);
+        height: calc(48px + (100vw - 500px) / 30);
+    }
+    .authFormQuestion {
+        font-size: calc(13.3333px + (100vw - 500px) / 110);
     }
 }
