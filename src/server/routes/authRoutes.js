@@ -11,8 +11,6 @@ router.post('/register', async (req, res) => {
         const email = req.body.email.toUpperCase();
         const userByEmail = await db.select('*').from('users').where('email', email)
         const userByUsername = await db.select('*').from('users').where('username', username)
-        console.log("email:", email, "username:", username, "password:", password, "userByEmail:", 
-        userByEmail, "userByUsername:", userByUsername)
 
         if (userByEmail.email && userByUsername.username) {
             return res.status(400).send({ message: "Email and Username have already been taken" });
@@ -27,7 +25,6 @@ router.post('/register', async (req, res) => {
         }
         
         const hashedPassword = await bcrypt.hash(password, 10);
-        console.log('hashedPassword')
 
         await db('users').insert({
             email: email,
@@ -48,8 +45,6 @@ router.post('/signin', async (req, res, next) => {
     const email = req.body.email.toUpperCase();
     const userByEmail = await db.select('*').from('users').where('email', email)
     const userByUsername = await db.select('*').from('users').where('username', username)
-    
-    console.log('userbyemail:', userByEmail, "userbyusername:", userByUsername)
 
     if (userByEmail.length === 0 && userByUsername.length === 0) {
         return res.status(400).send({ message: "Email and Username are incorrect" });
@@ -70,7 +65,6 @@ router.post('/signin', async (req, res, next) => {
       }
     
     passport.authenticate("local", (err, user, info) => {
-        console.log('log in user:', user, "infoL", info)
         if (err) { 
             console.error(`Error: ${err}`);
             return res.status(500).send({ message: `Error: ${err}` });

@@ -21,7 +21,6 @@ router.post('/add-budget', async (req, res) => {
 })
 
 router.delete('/delete-budget', async (req, res) => {
-    console.log("The request body:", req.body)
     try {
         await db('budgets').whereIn('id', req.body).del();
         res.status(200).send('Expenses deleted successfully.');
