@@ -11,6 +11,8 @@ router.post('/register', async (req, res) => {
         const email = req.body.email.toUpperCase();
         const userByEmail = await db.select('*').from('users').where('email', email)
         const userByUsername = await db.select('*').from('users').where('username', username)
+        console.log('userByEmail.email', userByEmail)
+        console.log('userByUsername.username', userByUsername)
 
         if (userByEmail.email && userByUsername.username) {
             return res.status(400).send({ message: "Email and Username have already been taken" });
@@ -18,9 +20,11 @@ router.post('/register', async (req, res) => {
         
         if (!req.body.email || !req.body.username || !password) {
             return res.status(400).send({ message: "All fields are required" });
-        } else if (userByEmail.email) {
+        } else if (userByEmail[0] && userByUsername[0]) {
+            return res.status(400).send({ message: 'Email and Username have already been taken'})
+        } else if (userByEmail[0]) {
             return res.status(400).send({ message: 'Email has already been taken'})
-        } else if (userByUsername.username) {
+        } else if (userByUsername[0]) {
             return res.status(400).send({ message: 'Username has already been taken'})
         }
         
@@ -34,6 +38,7 @@ router.post('/register', async (req, res) => {
         })
         return res.status(200).send({ message: 'Created new User' })
     } catch (err) {
+        console.log('past catch block')
         console.log(err);
         res.status(500).send({ message: 'Server error' });
     }
